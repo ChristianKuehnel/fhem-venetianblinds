@@ -1,5 +1,12 @@
 #!/usr/bin/perl -w
 
+##############################################
+#
+# This is open source software licensed unter the Apache License 2.0
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+##############################################
+
 use strict;
 use warnings;
 use Module::Load;
