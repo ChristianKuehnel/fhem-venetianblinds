@@ -73,7 +73,7 @@ sub Log($$) {
 
 sub update($$){
     my ($hash,$force) = @_;
-    Log 3, "triggering update";
+    Log 5, "triggering update";
     update_calendar($hash,$force);
     update_wind($hash,$force);
     update_sun_intensity($hash,$force);
@@ -272,7 +272,7 @@ sub process_device($$){
             return 1;
         }
 	} else {
-        Log 3, "process_device $device waiting for movement to be completed";
+        Log 5, "process_device $device waiting for movement to be completed";
     }
 	return 0;
 }
