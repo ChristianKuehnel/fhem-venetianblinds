@@ -18,13 +18,13 @@ package Rolladensteuerung;
 my %config = (
     "sides" => {
         "sued" => {
-            "blinds" => ["wz.sued_fenster"],
+            "blinds" => ["wz.sued_fenster","wz.sued_tuer"],
             "start_azimuth" => 90,
             "end_azimuth" => 230,
             "min_elevation" => 15,
         },
         "west" => {
-            "blinds" => ["wz.west_fenster"],
+            "blinds" => ["wz.west_fenster","ku.tuer","sz.west_fenster"],
             "start_azimuth" => 180,
             "end_azimuth" => 300,
             "min_elevation" => 15,
