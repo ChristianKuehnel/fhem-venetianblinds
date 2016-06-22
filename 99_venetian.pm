@@ -45,7 +45,7 @@ my %config = (
         },
         "stark_schattiert" => {
             "positionBlinds" => 0,
-            "positionSlat" => 40,   
+            "positionSlat" => 30,   
         },
     },
     "calendar" => {
@@ -265,7 +265,7 @@ sub process_device($$){
         if (abs($old_blinds - $blinds) > $config{blinds_threshold}) {
             Log 3, "process_device $device blinds $old_blinds -> $blinds";
             main::fhem("set $device positionBlinds $blinds"); 
-        } elsif (abs($old_slats - $slats) > $config{slats_threshold}) {    
+        } elsif ($blinds < 95 and abs($old_slats - $slats) > $config{slats_threshold}) {    
             Log 3, "process_device $device slats $old_slats -> $slats";
             main::fhem("set $device positionSlat $slats");
         } else {
