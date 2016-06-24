@@ -12,9 +12,12 @@ use POSIX;
 use Switch;
 use experimental "smartmatch";
 
-use venetianblinds::VenetianMasterController;
-use venetianblinds::VenetianRoomController;
-use venetianblinds::VenetianBlindController;
+use lib "venetian";
+use VenetianMasterController;
+use VenetianRoomController;
+use VenetianBlindController;
+
+package main;
 
 my %valid_types = (
 	"master" =>"VenetianMasterController",

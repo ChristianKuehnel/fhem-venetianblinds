@@ -7,40 +7,28 @@
 
 use strict;
 use warnings;
+use Module::Load;
 use v5.10.1;
 use experimental "smartmatch";
 use Test::More;
 use Time::HiRes "gettimeofday";
- 
-use VenetianBlindController;
 
+load "99_Venetian2";
 package main;
 
 ##############################################################################################
-sub test_VenetianBlindController() {
-	test_Define();
-	test_Set_questionsmark();
+sub test_venetian2(){
+	test_Set();
 }
-
 ##############################################################################################
-sub test_Define() {
-	my $hash = {}; 
-	my $a = [];
-	my $h = {
-		"master" => "mymaster",
-		"device" => "mydevice",
-	};
-	VenetianBlindController::Define($hash,$a,$h);
-	is($hash->{master_controller},"mymaster");
-	is($hash->{device},"mydevice");
-}
-
-sub test_Set_questionsmark() {
-	my $hash = {}; 
-	my $a = ["irgendwas","?"];
+sub test_Set() {
+	my $hash = {
+		"type" => "VenetianBlindController",
+	}; 
+	my $a = ["somename","?"];
 	my $h = {};
-	my $answer = VenetianBlindController::Set($hash,$a,$h);
-	ok(defined $answer);
+	my $answer = Venetian_Set($hash,$a,$h);
+	ok($answer =~ /automatic:noArg/);	
 }
 
 1;
