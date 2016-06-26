@@ -13,6 +13,26 @@ use warnings;
 use Switch;
 use experimental "smartmatch";
 
+
+my $scenes = {
+	"open" => {
+        "blind" => 99,
+        "slat" => 99,   
+    },
+    "closed" => {
+        "blind" => 0,
+        "slat" => 0,   
+    },
+    "see_through" => {
+        "blind" => 0,
+        "slat" => 50,   
+    },
+    "shaded" => {
+        "blind" => 0,
+        "slat" => 30,   
+    },
+};
+
 sub Define($$$){
 	my ($hash,$a,$h) = @_;
 	$hash->{master_controller} = $h->{master};
@@ -48,13 +68,17 @@ sub Set($$$){
 
 sub Notify($$$){
 	my ($hash, $devName, $events) = @_;	
+	if ($devName eq $hash->{master_controller}){
+		update_automatic($hash);
+	}
 	return undef;
 }
 
 sub update_automatic($){
 	#TODO: get sun and wind params from Master Controller
 	#TODO: decide what to do
-	#TODO: do it
+	# if ($hash->{automatic})
+	#   set_secene (...)
 }
 
 sub set_scene($$){

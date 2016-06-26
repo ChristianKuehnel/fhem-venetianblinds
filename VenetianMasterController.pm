@@ -13,7 +13,9 @@ use DateTime;
 
 # Map the condition codes from yahoo to cloudiness index, 
 # makes it easier to implement thresholds as higher number indicates more clouds
+# https://developer.yahoo.com/weather/documentation.html
 # https://de.wikipedia.org/wiki/Bew%C3%B6lkung#Einteilung_des_Flugwetterdienstes
+
 my $yahoo_code_map = {
 	#TODO: add mapping for more codes	
 	26 => 5, # cloudy
