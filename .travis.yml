@@ -7,14 +7,7 @@ perl:
 script: "perl test_suite.pm"
 
 install:
-	- "cpanm Test::More" 
-	- "cpanm Switch" 
-	- "cpanm experimental" 
-	- "cpanm Time::HiRes"
-
-notifications:
-  recipients:
-    - christian.kuehnel@gmail.com
-  email:
-    on_success: change
-    on_failure: always
+  - "cpanm Test::More" 
+  - "cpanm Switch" 
+  - "cpanm experimental" 
+  - "cpanm Time::HiRes"
