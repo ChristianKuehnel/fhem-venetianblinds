@@ -11,3 +11,8 @@ install:
   - "cpanm --quiet --notest Switch" 
   - "cpanm --quiet --notest experimental" 
   - "cpanm --quiet --notest Time::HiRes"
+
+notifications:
+  email:
+    - christian.kuehnel@gmail.com
+ 
