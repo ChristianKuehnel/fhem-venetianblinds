@@ -7,7 +7,7 @@ perl:
 script: "perl test_suite.pm"
 
 install:
-  - "cpanm Test::More" 
-  - "cpanm Switch" 
-  - "cpanm experimental" 
-  - "cpanm Time::HiRes"
+  - "cpanm --quiet --installdeps --notest Test::More" 
+  - "cpanm --quiet --installdeps --notest Switch" 
+  - "cpanm --quiet --installdeps --notest experimental" 
+  - "cpanm --quiet --installdeps --notest Time::HiRes"
