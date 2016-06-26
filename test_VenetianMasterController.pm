@@ -21,6 +21,7 @@ package main;
 sub test_VenetianMasterController() {
 	test_update_calendar();
 	test_update_twilight();
+	test_update_weather();
 }
 
 ##############################################################################################
@@ -49,10 +50,33 @@ sub test_update_twilight(){
 	add_reading("the_twilight", "azimuth", 199 );
 	
 	my $result = VenetianMasterController::update_twilight($hash);
+	ok(!defined $result);
 	is(ReadingsVal("RogerRabbit", "sun_elevation", undef), 27);
 	is(ReadingsVal("RogerRabbit", "sun_azimuth", undef) ,199);
 	
 }
+
+sub test_update_weather(){
+	main::reset_mocks();
+	my $hash = {
+		"name" => "JollyJumper",
+		"weather" => "some_weather",
+	};
+
+	add_reading("some_weather", "code", 26 );
+	add_reading("some_weather", "wind_speed", 15 );
+	my $result = VenetianMasterController::update_weather($hash);
+	ok(!defined $result);
+	is(ReadingsVal("JollyJumper", "wind_speed", undef), 15);
+	is(ReadingsVal("JollyJumper", "cloud_index", undef) ,5);
+
+	# try some unmapped weather code
+	add_reading("some_weather", "code", 3 );
+	$result = VenetianMasterController::update_weather($hash);
+	ok(!defined $result);
+	is(ReadingsVal("JollyJumper", "cloud_index", undef) ,9);
+}
+
 
 
 1;
