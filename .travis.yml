@@ -6,6 +6,9 @@ perl:
   
 script: "perl test_suite.pm"
 
+install:
+	- cpanm Test::More Switch experimental Time::HiRes
+
 notifications:
   recipients:
     - christian.kuehnel@gmail.com
