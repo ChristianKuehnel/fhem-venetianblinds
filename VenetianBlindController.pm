@@ -17,6 +17,12 @@ sub Define($$$){
 	my ($hash,$a,$h) = @_;
 	$hash->{master_controller} = $h->{master};
 	$hash->{device} = $h->{device};
+	my ($azstart,$azend) = split(/-/, $h->{azimuth});
+	$hash->{azimuth_start} = $azstart;
+	$hash->{azimuth_end} = $azend;
+	my ($evstart,$evend) = split(/-/, $h->{elevation});
+	$hash->{elevation_start} = $evstart;
+	$hash->{elevation_end} = $evend;	
 	return undef;
 }
 
@@ -31,10 +37,18 @@ sub Set($$$){
 	} elsif ($cmd ~~ keys %{$hash->{scenes}}) {
 		$hash->{automatic} = 0;
 		set_scene($hash,$cmd);
+	} elsif ($cmd eq "scenes") {
+		delete $hash->{scences};
 	} else {
 		return "unknown command $cmd";
 	}
 	return undef; 
+}
+
+
+sub Notify($$$){
+	my ($hash, $devName, $events) = @_;	
+	return undef;
 }
 
 sub update_automatic($){

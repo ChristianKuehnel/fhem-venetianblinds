@@ -33,7 +33,7 @@ sub Venetian_Initialize($) {
     #$hash->{GetFn}      = 'Venetian_Get';
     #$hash->{AttrFn}     = 'Venetian_Attr';
     #$hash->{ReadFn}     = 'Venetian_Read';    
-    #$hash->{NotifyFn}     = 'Venetian_Notify';
+    $hash->{NotifyFn}     = 'Venetian_Notify';
     $hash->{parseParams} = 1;
     return undef;
 }
@@ -52,6 +52,19 @@ sub Venetian_Set($$$) {
 	my ( $hash, $a,$h ) = @_;
 	my $result = undef;
 	return vbc_call("Set",$hash, $a, $h);
+}
+
+
+sub Venetian_Notify($$) {	
+    my ($own_hash, $dev_hash) = @_;
+    my $ownName = $own_hash->{NAME}; # own name / hash	
+	return "" if(IsDisabled($ownName)); # Return without any further action if the module is disabled
+	
+    my $devName = $dev_hash->{NAME}; # Device that created the events
+    my $events = main::deviceEvents($dev_hash,0);
+    return if( !$events );
+    
+	return vbc_call("Notify",$own_hash, $devName, $events);
 }
 
 sub vbc_call($$$$){
