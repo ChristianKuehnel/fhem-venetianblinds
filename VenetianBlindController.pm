@@ -10,7 +10,6 @@ package VenetianBlindController;
 use v5.10.1;
 use strict;
 use warnings;
-use Switch;
 use experimental "smartmatch";
 
 
@@ -33,7 +32,7 @@ my $scenes = {
     },
 };
 
-sub Define($$$){
+sub Define{
 	my ($hash,$a,$h) = @_;
 	$hash->{master_controller} = $h->{master};
 	$hash->{device} = $h->{device};
@@ -43,10 +42,10 @@ sub Define($$$){
 	my ($evstart,$evend) = split(/-/, $h->{elevation});
 	$hash->{elevation_start} = $evstart;
 	$hash->{elevation_end} = $evend;	
-	return undef;
+	return;
 }
 
-sub Set($$$){
+sub Set{
 	my ( $hash, $a,$h ) = @_;
 	my $cmd = $a->[1];
 	if ( $cmd eq "?" ){
@@ -62,26 +61,26 @@ sub Set($$$){
 	} else {
 		return "unknown command $cmd";
 	}
-	return undef; 
+	return; 
 }
 
 
-sub Notify($$$){
+sub Notify{
 	my ($hash, $devName, $events) = @_;	
 	if ($devName eq $hash->{master_controller}){
 		update_automatic($hash);
 	}
-	return undef;
+	return;
 }
 
-sub update_automatic($){
+sub update_automatic{
 	#TODO: get sun and wind params from Master Controller
 	#TODO: decide what to do
 	# if ($hash->{automatic})
 	#   set_secene (...)
 }
 
-sub set_scene($$){
+sub set_scene{
 	my ($hash,$scene) = @_;
 	#TODO:get secene config
 	#TODO:move blinds

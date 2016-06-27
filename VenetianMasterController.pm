@@ -26,22 +26,22 @@ my $yahoo_code_map = {
 };
 
 
-sub Define($$$){
+sub Define{
 	my ($hash,$a,$h) = @_;
 	$hash->{twilight} = $h->{twilight};
 	$hash->{weather} = $h->{weather};
 
-	return undef;
+	return;
 }
 
-sub Set($$$){
+sub Set{
 	my ($hash,$a,$h) = @_;
 
-	return undef;
+	return;
 }
 
 
-sub Notify($$$){
+sub Notify{
 	my ($hash, $devName, $events) = @_;
 	if ($devName eq $hash->{twilight}) {
 		update_twilight($hash);
@@ -53,10 +53,10 @@ sub Notify($$$){
 	  	$event = "" if(!defined($event));
 		main::Log(3,"Event on device $devName: $event");
 	}
-	return undef;		
+	return;		
 }
 
-sub update_twilight($){
+sub update_twilight{
 	my ($hash) = @_;
 	# TODO: reduce number of events: only trigger event if data has changed
 	main::readingsBeginUpdate($hash);
@@ -65,9 +65,10 @@ sub update_twilight($){
 	main::readingsBulkUpdate($hash, "sun_azimuth",
 		main::ReadingsVal($hash->{twilight}, "azimuth", undef) );
 	main::readingsEndUpdate($hash, 1);
+	return;
 }
 
-sub update_calendar($){
+sub update_calendar{
 	my ($hash) = @_;
     my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime(time);
     # Note: months start at 0 = January
@@ -78,10 +79,10 @@ sub update_calendar($){
 	}
 	#TODO: do the update exactly at midnight
 	main::InternalTimer(main::gettimeofday()+24*60*60, "VenetianMasterController::update_calendar", $hash, 1);        
-	return undef;
+	return ;
 }
 
-sub update_weather($){
+sub update_weather{
 	my ($hash) = @_;
 	my $condition_code = main::ReadingsVal($hash->{weather}, "code", undef);
 	my $cloud_index = undef;
@@ -96,6 +97,7 @@ sub update_weather($){
 		main::ReadingsVal($hash->{weather}, "wind_speed", undef) );
 	main::readingsBulkUpdate($hash, "cloud_index", $cloud_index);
 	main::readingsEndUpdate($hash, 1);
+	return;
 }
 
 1;

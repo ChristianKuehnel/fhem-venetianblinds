@@ -9,7 +9,6 @@ use v5.10.1;
 use strict;
 use warnings;
 use POSIX;
-use Switch;
 use experimental "smartmatch";
 
 use lib "venetian";
@@ -25,7 +24,7 @@ my %valid_types = (
 	"blind" => "VenetianBlindController",
 	);
 
-sub Venetian_Initialize($) {
+sub Venetian_Initialize {
     my ($hash) = @_;
     $hash->{DefFn}      = 'Venetian_Define';
     #$hash->{UndefFn}    = 'Venetian_Undef';
@@ -35,10 +34,10 @@ sub Venetian_Initialize($) {
     #$hash->{ReadFn}     = 'Venetian_Read';    
     $hash->{NotifyFn}     = 'Venetian_Notify';
     $hash->{parseParams} = 1;
-    return undef;
+    return;
 }
 
-sub Venetian_Define($$$) {
+sub Venetian_Define {
     my ($hash, $a, $h) = @_;	
 	$hash->{type} = $valid_types{$h->{type}};
 	if (!defined $hash->{type}) {
@@ -48,14 +47,14 @@ sub Venetian_Define($$$) {
 	return vbc_call("Define",$hash, $a, $h);
 }
 
-sub Venetian_Set($$$) {	
+sub Venetian_Set {	
 	my ( $hash, $a,$h ) = @_;
 	my $result = undef;
 	return vbc_call("Set",$hash, $a, $h);
 }
 
 
-sub Venetian_Notify($$) {	
+sub Venetian_Notify {	
     my ($own_hash, $dev_hash) = @_;
     my $ownName = $own_hash->{NAME}; # own name / hash	
 	return "" if(IsDisabled($ownName)); # Return without any further action if the module is disabled
@@ -67,13 +66,15 @@ sub Venetian_Notify($$) {
 	return vbc_call("Notify",$own_hash, $devName, $events);
 }
 
-sub vbc_call($$$$){
+sub vbc_call{
 	my ($func,$hash,$a,$h) = @_;
 	$func = "$hash->{type}::$func";
 	my $result;
 	{
+		## no critic (ProhibitNoStrict)
 		no strict 'refs';
 		$result = &$func($hash, $a, $h);
+		## use critic
 	}
 	return $result;	
 }

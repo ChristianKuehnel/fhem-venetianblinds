@@ -5,7 +5,7 @@
 #
 ##############################################
 
-package VenetianRoolController;
+package VenetianRoomController;
 
 use v5.10.1;
 use strict;
