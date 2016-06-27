@@ -9,7 +9,6 @@ package VenetianMasterController;
 use v5.10.1;
 use strict;
 use warnings;
-use DateTime;
 
 # Map the condition codes from yahoo to cloudiness index, 
 # makes it easier to implement thresholds as higher number indicates more clouds
