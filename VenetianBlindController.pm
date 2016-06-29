@@ -41,7 +41,8 @@ sub Define{
 	$hash->{azimuth_end} = $azend;
 	my ($evstart,$evend) = split(/-/, $h->{elevation});
 	$hash->{elevation_start} = $evstart;
-	$hash->{elevation_end} = $evend;	
+	$hash->{elevation_end} = $evend;
+	$hash->{current_scene} = undef;	
 	return;
 }
 
@@ -49,7 +50,7 @@ sub Set{
 	my ( $hash, $a,$h ) = @_;
 	my $cmd = $a->[1];
 	if ( $cmd eq "?" ){
-		return "automatic:noArg"
+		return "automatic:noArg wind_alarm:noArg"
 	} elsif ($cmd eq "automatic") {
 		$hash->{automatic} = 1;
 		update_automatic($hash);
@@ -58,7 +59,9 @@ sub Set{
 		set_scene($hash,$cmd);
 	} elsif ($cmd eq "scenes") {
 		delete $hash->{scences};
-	} else {
+	} elsif ($cmd eq "wind_alarm") {
+		wind_alarm($hash);
+	}else {
 		return "unknown command $cmd";
 	}
 	return; 
@@ -81,9 +84,15 @@ sub update_automatic{
 }
 
 sub set_scene{
-	my ($hash,$scene) = @_;
+	my ($hash,$scene,$force) = @_;
+	# if !wind_alarm
 	#TODO:get secene config
 	#TODO:move blinds
+}
+
+sub wind_alarm{
+	my ($hash) = @_;
+	#if not open -> set position to open
 }
 
 1;

@@ -22,6 +22,8 @@ sub test_VenetianMasterController() {
 	test_update_calendar();
 	test_update_twilight();
 	test_update_weather();
+	test_find_devices();
+	test_wind_alarm();
 }
 
 ##############################################################################################
@@ -77,6 +79,45 @@ sub test_update_weather(){
 	is(ReadingsVal("JollyJumper", "cloud_index", undef) ,9);
 }
 
+sub test_find_devices{
+	main::reset_mocks();
+	main::set_fhem_mock("list .* type",
+		"shady1   VenetianBlindController\nshady2    VenetianBlindController\nother Some different type of thing");
+	
+	my @device_list = VenetianMasterController::find_devices();
+	is(scalar @device_list,2);
+	ok("shady1" ~~ @device_list);
+	ok("shady2" ~~ @device_list);
+	
+}
+
+sub test_wind_alarm{
+	main::reset_mocks();
+	main::set_fhem_mock("list .* type",
+		"shady1   VenetianBlindController");
+	my $hash = {
+		"name" => "NervousNick",
+	};
+	add_reading("NervousNick", "wind_speed", 10 );
+	add_reading("NervousNick", "wind_alarm", 0 );
+	
+	my $result = VenetianMasterController::check_wind_alarm($hash);
+	ok(!defined $result);
+	is(ReadingsVal("NervousNick", "wind_alarm", undef) ,0);
+	
+	add_reading("NervousNick", "wind_speed", 51 );
+	main::set_fhem_mock("set shady1 wind_alarm", undef);
+	
+	$result = VenetianMasterController::check_wind_alarm($hash);
+	ok(!defined $result);
+	is(ReadingsVal("NervousNick", "wind_alarm", undef) ,1);
+	
+	add_reading_time("NervousNick", "wind_speed", 49, time()-700 );
+	$result = VenetianMasterController::check_wind_alarm($hash);
+	ok(!defined $result);
+	is(ReadingsVal("NervousNick", "wind_alarm", undef) ,0);
+	
+}
 
 
 1;

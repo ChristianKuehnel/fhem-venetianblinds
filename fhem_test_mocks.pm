@@ -7,32 +7,48 @@
 
 use strict;
 use warnings;
+use experimental "smartmatch";
 
 package main;
 
+
+# general ################################
 my %readings = ();
-my @fhem_list = ();
+my %fhem_list = ();
+my @fhem_expected_list = ();
 my @timer_list = ();
 
-
-sub ReadingsVal($$$) {
-    my ($device,$reading,$default) = @_;
-    my $value = $readings{$device}{$reading};
-    #print "readings $device, $reading, $value \n";
-    ok(defined $value,"ReadingsVal $device:$reading");
-    return $value;
+sub reset_mocks(){
+	%readings = ();
+	%fhem_list = ();
+	@timer_list = ();
+	@fhem_expected_list = ();
 }
 
-sub Log($$){
+
+# Logging ################################
+
+sub Log{
 print "Log: $_[0] , $_[1] \n"; 
 }
 
-sub fhem($){
+
+# fhem command ##########################
+sub fhem{
     my ($cmd) = @_;
-    push(@fhem_list, $cmd);
+    ok($cmd ~~ @fhem_expected_list, "fhem $cmd");
+    return $fhem_list{$cmd};  
 }
 
-sub InternalTimer($$$$){
+sub set_fhem_mock{
+	my ($cmd, $return_value) = @_;
+	$fhem_list{$cmd} = $return_value;
+	push(@fhem_expected_list,$cmd);
+}
+
+# Timer ###############################
+
+sub InternalTimer{
 	my ($time,$func,$param,$init) = @_;
 	push(@timer_list, {
 		"timer" => $time,
@@ -54,19 +70,41 @@ sub trigger_timer(){
 	    use strict "refs";	}
 }
 
-sub reset_mocks(){
-	%readings = ();
-	@fhem_list = ();
-	@timer_list = ();
+
+sub get_timer_list(){
+	return @timer_list;
+};
+
+# Readings ###############################################
+
+sub ReadingsVal {
+    my ($device,$reading,$default) = @_;
+    my $value = $readings{$device}{$reading}{value};
+    #print "readings $device, $reading, $value \n";
+    ok(defined $value,"ReadingsVal $device:$reading");
+    return $value;
 }
 
-sub add_reading($$$){
+sub ReadingsAge {
+    my ($device,$reading,$default) = @_;
+    my $time = $readings{$device}{$reading}{timestamp};
+    #print "readings $device, $reading, $value \n";
+    ok(defined $time,"ReadingsAge $device:$reading");
+    return time-$time;
+}
+
+sub add_reading{
 	my ($device,$reading,$value) = @_;
-	$readings{$device}{$reading} = $value;
+	add_reading_time($device,$reading,$value,time());
 }
 
+sub add_reading_time{
+	my ($device,$reading,$value,$timestamp) = @_;
+	$readings{$device}{$reading}{value} = $value;
+	$readings{$device}{$reading}{timestamp} = $timestamp;
+}
 
-sub readingsSingleUpdate($$$$){
+sub readingsSingleUpdate{
 	my ($hash,$reading,$value,$trigger) = @_;
 	my $device = $hash->{name};
 	ok(defined $device);
@@ -74,9 +112,6 @@ sub readingsSingleUpdate($$$$){
 	print("update reading: $device - $reading = '$value'\n");		
 }		
 
-sub get_timer_list(){
-	return @timer_list;
-};
 
 sub readingsBeginUpdate($){
 	#not sure how to mock this...

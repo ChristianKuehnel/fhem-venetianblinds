@@ -11,7 +11,7 @@ use warnings;
 use POSIX;
 use experimental "smartmatch";
 
-use lib "venetian";
+
 use VenetianMasterController;
 use VenetianRoomController;
 use VenetianBlindController;
