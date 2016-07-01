@@ -21,7 +21,7 @@ my %config = (
             "blinds" => ["wz.sued_fenster","wz.sued_tuer"],
             "start_azimuth" => 90,
             "end_azimuth" => 230,
-            "min_elevation" => 15,
+            "min_elevation" => 8,
         },
         "west" => {
             "blinds" => ["wz.west_fenster","ku.tuer","sz.west_fenster"],
