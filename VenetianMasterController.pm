@@ -106,16 +106,22 @@ sub update_calendar{
 sub update_weather{
 	my ($hash) = @_;
 	my $condition_code = main::ReadingsVal($hash->{weather}, "code", undef);
-	my $cloud_index = undef;
+	if (!defined $condition_code) {
+        main::Log(1,"could not get Weather condition code from '$hash->{weather}'");
+    }
+    my $cloud_index = undef;
 	$cloud_index = $yahoo_code_map->{$condition_code};
 	if (!defined $cloud_index){
 		$cloud_index = 9;
 	};
+    my $wind_speed = main::ReadingsVal($hash->{weather}, "wind_speed", undef);
+    if (!defined $wind_speed) {
+        main::Log(1,"could not get Weather wind_speed from '$hash->{weather}'");
+    }
 	
 	# TODO: reduce number of events: only trigger event if data has changed
 	main::readingsBeginUpdate($hash);	
-	main::readingsBulkUpdate($hash, "wind_speed",
-		main::ReadingsVal($hash->{weather}, "wind_speed", undef) );
+	main::readingsBulkUpdate($hash, "wind_speed", $wind_speed);
 	main::readingsBulkUpdate($hash, "cloud_index", $cloud_index);
 	main::readingsEndUpdate($hash, 1);
 	

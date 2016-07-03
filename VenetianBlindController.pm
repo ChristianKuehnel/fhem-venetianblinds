@@ -75,15 +75,15 @@ sub Set{
 		return $result;
 	} elsif ($cmd eq "automatic") {
 		$hash->{automatic} = 1;
-		update_automatic($hash);
-	} elsif ($cmd ~~ @scene_list) {
+		update_automatic($hash,1);
+    } elsif ($cmd ~~ @scene_list) {
 		$hash->{automatic} = 0;
 		set_scene($hash, $cmd, 0);
 	} elsif ($cmd eq "scenes") {
 		delete $hash->{scences};
 	} elsif ($cmd eq "wind_alarm") {
 		wind_alarm($hash);
-	}else {
+	} else {
 		return "unknown command $cmd";
 	}
 	return; 
@@ -92,8 +92,8 @@ sub Set{
 
 sub Notify{
 	my ($hash, $devName, $events) = @_;	
-	if ($devName eq $hash->{master_controller}){
-		update_automatic($hash);
+    if ($devName eq $hash->{master_controller}){
+		update_automatic($hash,0);
 	}
 	return;
 }
@@ -101,8 +101,8 @@ sub Notify{
 
 # logic for blind control #####################
 sub update_automatic{
-	my ($hash) = @_;
-	my $master = $hash->{master_controller};
+	my ($hash,$force) = @_;
+    my $master = $hash->{master_controller};
 	my $sun_elevation = main::ReadingsVal($master, "sun_elevation", undef);
 	my $sun_azimuth = main::ReadingsVal($master, "sun_azimuth", undef);
 	my $wind_speed = main::ReadingsVal($master, "wind_speed", undef);
@@ -129,7 +129,7 @@ sub update_automatic{
 		$new_scene = "open";
 	}
 	
-	if (!($new_scene eq $hash->{scene})) {
+	if ($force or !($new_scene eq $hash->{scene})) {
 		set_scene($hash,$new_scene,0);
 	}
 }
@@ -140,7 +140,13 @@ sub set_scene{
 	if (!defined $scenes->{$scene}){
 		main::Log(1, "undefined scene $scenes->{scene}");
 	} else {
-		move_blinds($hash, $scenes->{$scene}{blind}, $scenes->{$scene}{slat});	
+	    $hash->{scene} = $scene;
+        if ($hash->{automatic}) {
+            $hash->{STATE} = "automatic: $scene";
+        } else {
+            $hash->{STATE} = "manual: $scene";
+        }
+        move_blinds($hash, $scenes->{$scene}{blind}, $scenes->{$scene}{slat});	
 	}
 }
 
@@ -197,6 +203,7 @@ sub get_position{
     main::fhem("get $hash->{device} position");
     #TODO: do we really need a ReadingsVal or does the "get position" also deliver that result?
     my $position = main::ReadingsVal($hash->{device}, "position", undef);
+    $hash->{position} = $position;
     $position =~ /Blind (\d+) Slat (\d+)/;
     if (!defined $1 or !defined $2){
         main::Log( 1, "Error: could not get position of device $hash->{device}: $position");

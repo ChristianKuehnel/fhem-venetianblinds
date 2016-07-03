@@ -12,9 +12,9 @@ use POSIX;
 use experimental "smartmatch";
 
 
-use VenetianMasterController;
-use VenetianRoomController;
-use VenetianBlindController;
+use venetianblinds::VenetianMasterController;
+use venetianblinds::VenetianRoomController;
+use venetianblinds::VenetianBlindController;
 
 package main;
 
