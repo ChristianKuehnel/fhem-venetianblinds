@@ -55,7 +55,7 @@ sub Define{
 
 	my ($monstart,$monend) = split(/-/, $h->{months});
 	$hash->{month_start} = $monstart;
-	$hash->{month_start} = $monend;
+	$hash->{month_end} = $monend;
 
 
 	$hash->{automatic} = 0;	
@@ -120,7 +120,7 @@ sub update_automatic{
 	
 	my $new_scene = undef;
 	if ($hash->{elevation_start} <= $sun_elevation and 
-		$sun_elevation <= $hash->{end_elevation} and
+		$sun_elevation <= $hash->{elevation_end} and
 		$hash->{azimuth_start} <= $sun_azimuth and
 		$sun_azimuth <= $hash->{azimuth_end} and
 		$cloud_index <= $hash->{could_index_threshold}) {

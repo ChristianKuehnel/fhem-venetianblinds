@@ -11,6 +11,7 @@ install:
   - "cpanm --quiet --notest Switch" 
   - "cpanm --quiet --notest experimental" 
   - "cpanm --quiet --notest Time::HiRes"
+  - "cpanm --quiet --notest Test::MockModule"
 
 notifications:
   email:

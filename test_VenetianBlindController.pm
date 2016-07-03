@@ -11,6 +11,7 @@ use v5.10.1;
 use experimental "smartmatch";
 use Test::More;
 use Time::HiRes "gettimeofday";
+use Test::MockModule;
  
 use VenetianBlindController;
 
@@ -25,6 +26,8 @@ sub test_VenetianBlindController() {
 	test_move_both();
 	test_wind_alarm_vbc();
 	test_set_scene();
+	test_update_automatic_off();
+	test_update_automatic_down();
 }
 
 ##############################################################################################
@@ -130,9 +133,104 @@ sub test_set_scene {
 	set_fhem_mock("get shadow position","Blind 0 Slat 30");
 	set_fhem_mock("set shadow positionBlinds 99",undef);
 	VenetianBlindController::set_scene($hash,"open");
-	is(scalar @{get_fhem_history()},2,join(", ",@{get_fhem_history()}));	
+	is(scalar @{get_fhem_history()},2,join(", ",@{get_fhem_history()}));		
+}
 
+sub test_update_automatic_off {
+	my $newScene = undef;
+	my $master = "YourGrace";
 	
+    my $module = Test::MockModule->new('VenetianBlindController');
+    $module->mock('set_scene', sub { 
+		my ($hash,$scene,$force) = @_;
+        $newScene = $scene; });
+	my $hash = {
+		"device" => "shadow",
+		"master_controller" => $master,
+		"automatic" => 0,
+	};
+	add_reading($master, "sun_elevation", 40);
+	add_reading($master, "sun_azimuth", 60);
+	add_reading($master, "wind_speed", 5);
+	add_reading($master, "wind_alarm", "");
+	add_reading($master, "cloud_index", 1);
+	add_reading($master, "month", 7);
+  	VenetianBlindController::update_automatic($hash);              
+}
+
+sub test_update_automatic_down {
+	my $newScene = undef;
+	my $master = "YourGrace";
+	
+    my $module = Test::MockModule->new('VenetianBlindController');
+    $module->mock('set_scene', sub { 
+		my ($hash,$scene,$force) = @_;
+        $newScene = $scene; });
+	my $hash = {
+		"device" => "shadow",
+		"master_controller" => $master,
+		"automatic" => 1,
+		"could_index_threshold" => 4,
+		"azimuth_start" => 10,
+		"azimuth_end" => 90,
+		"elevation_start" => 5,
+		"elevation_end" => 80,
+		"month_start" => 5,
+		"month_end" => 10,
+	};
+	add_reading($master, "sun_elevation", 40);
+	add_reading($master, "sun_azimuth", 50);
+	add_reading($master, "wind_speed", 5);
+	add_reading($master, "wind_alarm", 0);
+	add_reading($master, "cloud_index", 4);
+	add_reading($master, "month", 3);
+  	VenetianBlindController::update_automatic($hash);
+  	is($newScene,undef);          
+
+	$newScene = undef;
+	add_reading($master, "month", 7);
+  	VenetianBlindController::update_automatic($hash);
+  	is($newScene,"shaded");          
+
+	$newScene = undef;
+	add_reading($master, "cloud_index", 7);
+  	VenetianBlindController::update_automatic($hash);
+  	is($newScene,"open");          
+	add_reading($master, "cloud_index", 5);
+	
+	$newScene = undef;
+	add_reading($master, "sun_elevation", 3);
+  	VenetianBlindController::update_automatic($hash);
+  	is($newScene,"open");          	
+
+	$newScene = undef;
+	add_reading($master, "sun_elevation", 100);
+  	VenetianBlindController::update_automatic($hash);
+  	is($newScene,"open");          	
+	add_reading($master, "sun_elevation", 50);
+
+	$newScene = undef;
+	add_reading($master, "cloud_index", 5);
+  	VenetianBlindController::update_automatic($hash);
+  	is($newScene,"open");          
+	add_reading($master, "cloud_index", 2);
+
+	$newScene = undef;
+	add_reading($master, "sun_azimuth", 3);
+  	VenetianBlindController::update_automatic($hash);
+  	is($newScene,"open");          
+
+	$newScene = undef;
+	add_reading($master, "sun_azimuth", 120);
+  	VenetianBlindController::update_automatic($hash);
+  	is($newScene,"open");          
+	add_reading($master, "sun_azimuth", 60);
+
+	$newScene = undef;
+	VenetianBlindController::update_automatic($hash);
+  	is($newScene,"shaded");          
+
+
 }
 
 1;
