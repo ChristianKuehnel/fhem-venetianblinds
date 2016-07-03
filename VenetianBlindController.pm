@@ -137,13 +137,18 @@ sub update_automatic{
 # move the blinds ##########################
 sub set_scene{
 	my ($hash,$scene,$force) = @_;
-	move_blinds($hash, $scenes->{scene}{blind}, $scenes->{scene}{slat});
+	if (!defined $scenes->{$scene}){
+		main::Log(1, "undefined scene $scenes->{scene}");
+	} else {
+		move_blinds($hash, $scenes->{$scene}{blind}, $scenes->{$scene}{slat});	
+	}
 }
 
 sub move_blinds{
 	my ($hash, $blind, $slat)= @_;
 	my ($current_blind, $current_slat) = get_position($hash);
-	if ( abs($blind-$current_blind) > $blind_threshold ){
+	if ( defined $blind and
+		abs($blind-$current_blind) > $blind_threshold ){
 		main::fhem("set $hash->{device} positionBlinds $blind");
 	}
 	if ( defined $slat and 
@@ -190,6 +195,7 @@ sub get_power{
 sub get_position{
 	my ($hash) = @_;
     main::fhem("get $hash->{device} position");
+    #TODO: do we really need a ReadingsVal or does the "get position" also deliver that result?
     my $position = main::ReadingsVal($hash->{device}, "position", undef);
     $position =~ /Blind (\d+) Slat (\d+)/;
     if (!defined $1 or !defined $2){

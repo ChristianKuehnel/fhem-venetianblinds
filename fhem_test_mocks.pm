@@ -16,6 +16,7 @@ package main;
 my %readings = ();
 my %fhem_list = ();
 my @fhem_expected_list = ();
+my @fhem_history = ();
 my @timer_list = ();
 
 sub reset_mocks(){
@@ -23,6 +24,7 @@ sub reset_mocks(){
 	%fhem_list = ();
 	@timer_list = ();
 	@fhem_expected_list = ();
+	@fhem_history = ();
 }
 
 
@@ -37,6 +39,7 @@ print "Log: $_[0] , $_[1] \n";
 sub fhem{
     my ($cmd) = @_;
     ok($cmd ~~ @fhem_expected_list, "fhem $cmd");
+    push(@fhem_history,$cmd);
     return $fhem_list{$cmd};  
 }
 
@@ -44,6 +47,14 @@ sub set_fhem_mock{
 	my ($cmd, $return_value) = @_;
 	$fhem_list{$cmd} = $return_value;
 	push(@fhem_expected_list,$cmd);
+}
+
+sub get_fhem_history{
+	return \@fhem_history;
+}
+
+sub reset_fhem_history {
+	@fhem_history = ();
 }
 
 # Timer ###############################
