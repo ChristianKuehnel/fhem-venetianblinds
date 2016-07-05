@@ -146,6 +146,7 @@ sub set_scene{
         } else {
             $hash->{STATE} = "manual: $scene";
         }
+        main::Log(3,"moving blinds $hash->{device} to scene $scene.");
         move_blinds($hash, $scenes->{$scene}{blind}, $scenes->{$scene}{slat});	
 	}
 }
