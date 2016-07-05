@@ -18,12 +18,16 @@ use experimental "smartmatch";
 
 my $yahoo_code_map = {
 	#TODO: add mapping for more codes	
+	23 => 4, # blustery
+	24 => 4, # windy
 	26 => 5, # cloudy
     28 => 6, # mostly cloudy (day)
     30 => 3, # partly cloudy (day)
     32 => 1, # sunny 
     34 => 2, # fair (day)
     36 => 0, # hot
+    38 => 5, #scattered thunderstorms
+    39 => 5, #scattered thunderstorms
 };
 
 my $wind_speed_threshold = 50;
