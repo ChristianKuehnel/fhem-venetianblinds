@@ -93,6 +93,7 @@ sub Set{
 sub Notify{
 	my ($hash, $devName, $events) = @_;	
     if ($devName eq $hash->{master_controller}){
+    	main::Log(3,"update from master controller");
 		update_automatic($hash,0);
 	}
 	return;
