@@ -139,6 +139,7 @@ sub check_wind_alarm{
 	given ($windalarm) {
 		when (0) {
 			if (($windspeed >= $wind_speed_threshold)){
+				main::Log(3,"Wind alarm: $windspeed km/h");
 				main::readingsSingleUpdate($hash,"wind_alarm",1,1);		
 				foreach my $device (find_devices()) {
 					main::fhem("set $device wind_alarm");			
@@ -152,6 +153,7 @@ sub check_wind_alarm{
 			} else {
 				if (main::ReadingsAge($hash->{name},"wind_speed",undef) > 600) {
 					main::readingsSingleUpdate($hash,"wind_alarm",0,1);		
+					main::Log(3,"Wind alarm ended.");
 				}
 			}						
 		}
