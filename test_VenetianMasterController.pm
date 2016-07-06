@@ -32,7 +32,7 @@ sub test_update_calendar(){
 	main::reset_mocks();
 	main::add_reading("myname","month","0");
 	my $hash = {
-		"name" => "myname",
+		"NAME" => "myname",
 	};
 	my $result = VenetianMasterController::update_calendar($hash);
 	ok(!defined $result);
@@ -45,7 +45,7 @@ sub test_update_calendar(){
 sub test_update_twilight(){
 	main::reset_mocks();
 	my $hash = {
-		"name" => "RogerRabbit",
+		"NAME" => "RogerRabbit",
 		"twilight" => "the_twilight",
 	};
 	add_reading("the_twilight", "elevation", 27 );
@@ -61,7 +61,7 @@ sub test_update_twilight(){
 sub test_update_weather(){
 	main::reset_mocks();
 	my $hash = {
-		"name" => "JollyJumper",
+		"NAME" => "JollyJumper",
 		"weather" => "some_weather",
 	};
 
@@ -96,7 +96,7 @@ sub test_wind_alarm{
 	main::set_fhem_mock("list .* type",
 		"shady1   VenetianBlindController");
 	my $hash = {
-		"name" => "NervousNick",
+		"NAME" => "NervousNick",
 	};
 	add_reading("NervousNick", "wind_speed", 10 );
 	add_reading("NervousNick", "wind_alarm", 0 );

@@ -126,10 +126,13 @@ sub test_wind_alarm_vbc {
 sub test_set_scene {
 	main::reset_mocks();
 	my $hash = {
-		"device" => "shadow"
+		"device" => "shadow",
+		"NAME" => "my_name",
 	};
 	add_reading("shadow","position","Blind 0 Slat 30");
 	add_reading("shadow","power","0 W");
+	add_reading($hash->{NAME},"scene","closed");
+	add_reading($hash->{NAME},"automatic",1);
 	set_fhem_mock("get shadow position","Blind 0 Slat 30");
 	set_fhem_mock("set shadow positionBlinds 99",undef);
 	VenetianBlindController::set_scene($hash,"open");
@@ -145,9 +148,9 @@ sub test_update_automatic_off {
 		my ($hash,$scene,$force) = @_;
         $newScene = $scene; });
 	my $hash = {
-		"device" => "shadow",
+		"device" => "test_update_automatic_off",
 		"master_controller" => $master,
-		"automatic" => 0,
+		"NAME" => "vbc",
 	};
 	add_reading($master, "sun_elevation", 40);
 	add_reading($master, "sun_azimuth", 60);
@@ -155,7 +158,8 @@ sub test_update_automatic_off {
 	add_reading($master, "wind_alarm", "");
 	add_reading($master, "cloud_index", 1);
 	add_reading($master, "month", 7);
-  	VenetianBlindController::update_automatic($hash);              
+	add_reading($hash->{NAME}, "automatic", 0);
+  	VenetianBlindController::update_automatic($hash,0);              
 }
 
 sub test_update_automatic_down {
@@ -166,12 +170,12 @@ sub test_update_automatic_down {
     $module->mock('set_scene', sub { 
 		my ($hash,$scene,$force) = @_;
         $newScene = $scene; 
-	  	$hash->{scene}=$newScene;          
+	  	add_reading("its_me","scene",$newScene);          
     });
 	my $hash = {
-		"device" => "shadow",
+		"NAME" => "its_me",
+		"device" => "shadow2",
 		"master_controller" => $master,
-		"automatic" => 1,
 		"could_index_threshold" => 4,
 		"azimuth_start" => 10,
 		"azimuth_end" => 90,
@@ -179,14 +183,15 @@ sub test_update_automatic_down {
 		"elevation_end" => 80,
 		"month_start" => 5,
 		"month_end" => 10,
-		"scene" => undef,
-	};
+};
 	add_reading($master, "sun_elevation", 40);
 	add_reading($master, "sun_azimuth", 50);
 	add_reading($master, "wind_speed", 5);
 	add_reading($master, "wind_alarm", 0);
 	add_reading($master, "cloud_index", 4);
 	add_reading($master, "month", 3);
+	add_reading($hash->{NAME}, "automatic", 1);
+	add_reading($hash->{NAME}, "scene", "closed");
   	VenetianBlindController::update_automatic($hash,0);
   	is($newScene,undef);          
 
@@ -202,7 +207,7 @@ sub test_update_automatic_down {
 	add_reading($master, "cloud_index", 5);
 	
 	$newScene = undef;
-	$hash->{scene} = "closed";
+	add_reading($hash->{NAME},"scene","closed");
 	add_reading($master, "sun_elevation", 3);
   	VenetianBlindController::update_automatic($hash,0);
   	is($newScene,"open");          	
@@ -237,7 +242,7 @@ sub test_update_automatic_down {
 	#repeast same command -> do not move anything
 	$newScene = undef;
 	VenetianBlindController::update_automatic($hash,0);
-  	is($hash->{scene},"shaded");          
+  	is(ReadingsVal($hash->{NAME},"scene",undef),"shaded");          
   	is($newScene,undef);          
 
 	$newScene = undef;
@@ -247,10 +252,10 @@ sub test_update_automatic_down {
 	add_reading($master, "wind_alarm", 0);
 
 	$newScene = undef;
-	$hash->{automatic} = 0;
+	add_reading($hash->{NAME}, "automatic", 0);
 	VenetianBlindController::update_automatic($hash,0);
   	is($newScene,undef);          
-	$hash->{automatic} = 1;
+	add_reading($hash->{NAME}, "automatic", 1);
 
 
 }

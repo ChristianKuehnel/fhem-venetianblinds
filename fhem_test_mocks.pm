@@ -90,9 +90,11 @@ sub get_timer_list(){
 
 sub ReadingsVal {
     my ($device,$reading,$default) = @_;
+    ok(defined $device,"defined $device");
+    ok(defined $reading,"defined $device reading $reading");
     my $value = $readings{$device}{$reading}{value};
     #print "readings $device, $reading, $value \n";
-    ok(defined $value,"ReadingsVal $device:$reading");
+    #ok(defined $value,"ReadingsVal $device:$reading");
     return $value;
 }
 
@@ -117,10 +119,10 @@ sub add_reading_time{
 
 sub readingsSingleUpdate{
 	my ($hash,$reading,$value,$trigger) = @_;
-	my $device = $hash->{name};
+	my $device = $hash->{NAME};
 	ok(defined $device);
-	add_reading($device, $reading, $value);
 	print("update reading: $device - $reading = '$value'\n");		
+	add_reading($device, $reading, $value);
 }		
 
 
@@ -134,7 +136,7 @@ sub readingsEndUpdate($){
 
 sub readingsBulkUpdate($$$){
 	my ($hash, $reading, $value) = @_;
-	my $device = $hash->{name};
+	my $device = $hash->{NAME};
 	ok(defined $device);
 	add_reading($device, $reading, $value);
 }

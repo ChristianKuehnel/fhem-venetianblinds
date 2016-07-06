@@ -57,9 +57,6 @@ sub Define{
 	$hash->{month_start} = $monstart;
 	$hash->{month_end} = $monend;
 
-
-	$hash->{automatic} = 0;	
-	$hash->{scene} = undef;	
 	return;
 }
 
@@ -74,10 +71,10 @@ sub Set{
 		}
 		return $result;
 	} elsif ($cmd eq "automatic") {
-		$hash->{automatic} = 1;
+		main::readingsSingleUpdate($hash,"automatic",1,1);		
 		update_automatic($hash,1);
     } elsif ($cmd ~~ @scene_list) {
-		$hash->{automatic} = 0;
+		main::readingsSingleUpdate($hash,"automatic",0,1);		
 		set_scene($hash, $cmd, 0);
 	} elsif ($cmd eq "scenes") {
 		delete $hash->{scences};
@@ -109,10 +106,12 @@ sub update_automatic{
 	my $wind_alarm = main::ReadingsVal($master, "wind_alarm", undef);
 	my $cloud_index = main::ReadingsVal($master, "cloud_index", undef);
 	my $month = main::ReadingsVal($master, "month", undef);
+	my $automatic = main::ReadingsVal($hash->{NAME}, "automatic", undef);
+	my $old_scene = main::ReadingsVal($hash->{NAME}, "scene", undef);
 	
 	# reasons to not work in automatic mode
 	if ($wind_alarm  
-		or !$hash->{automatic} 
+		or !$automatic
 		or $month < $hash->{month_start} 
 		or $month > $hash->{month_end} 	){ 
 			return;
@@ -130,7 +129,7 @@ sub update_automatic{
 		$new_scene = "open";
 	}
 	
-	if ($force or !($new_scene eq $hash->{scene})) {
+	if ($force or !($new_scene eq $old_scene)) {
 		set_scene($hash,$new_scene,0);
 	} else {
         main::Log(3,"Scene has not changed on $hash->{NAME}, not moving blinds");
@@ -140,11 +139,14 @@ sub update_automatic{
 # move the blinds ##########################
 sub set_scene{
 	my ($hash,$scene,$force) = @_;
+	my $automatic = main::ReadingsVal($hash->{NAME}, "automatic", undef);
+	my $old_scene = main::ReadingsVal($hash->{NAME}, "scene", undef);
+
 	if (!defined $scenes->{$scene}){
-		main::Log(1, "undefined scene $scenes->{scene}");
+		main::Log(1, "undefined scene $scenes->{$scene}");
 	} else {
-	    $hash->{scene} = $scene;
-        if ($hash->{automatic}) {
+		main::readingsSingleUpdate($hash,"scene",$scene,1);		
+        if ($automatic) {
             $hash->{STATE} = "automatic: $scene";
         } else {
             $hash->{STATE} = "manual: $scene";
@@ -205,8 +207,9 @@ sub get_power{
 sub get_position{
 	my ($hash) = @_;
     main::fhem("get $hash->{device} position");
+    my $device=$hash->{device};
     #TODO: do we really need a ReadingsVal or does the "get position" also deliver that result?
-    my $position = main::ReadingsVal($hash->{device}, "position", undef);
+    my $position = main::ReadingsVal($device, "position", undef);
     $hash->{position} = $position;
     $position =~ /Blind (\d+) Slat (\d+)/;
     if (!defined $1 or !defined $2){
