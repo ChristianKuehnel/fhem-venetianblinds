@@ -93,7 +93,6 @@ sub Set{
 sub Notify{
 	my ($hash, $devName, $events) = @_;	
     if ($devName eq $hash->{master_controller}){
-    	main::Log(3,"update from master controller");
 		update_automatic($hash,0);
 	}
 	return;
@@ -116,7 +115,8 @@ sub update_automatic{
 		or !$hash->{automatic} 
 		or $month < $hash->{month_start} 
 		or $month > $hash->{month_end} 	){ 
-			return; 
+			return;
+        main::Log(3,"Automatic inactive on $hash->{NAME}"); 
 	}
 	
 	my $new_scene = undef;
@@ -132,7 +132,9 @@ sub update_automatic{
 	
 	if ($force or !($new_scene eq $hash->{scene})) {
 		set_scene($hash,$new_scene,0);
-	}
+	} else {
+        main::Log(3,"Scene has not changed on $hash->{NAME}, not moving blinds");
+    }
 }
 
 # move the blinds ##########################

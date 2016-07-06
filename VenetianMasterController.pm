@@ -98,7 +98,7 @@ sub update_calendar{
     my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime(time);
     # Note: months start at 0 = January
     $mon +=1;
-    my $current = main::ReadingsVal($hash->{name}, "month", undef);    
+    my $current = main::ReadingsVal($hash->{NAME}, "month", undef);    
 	if ($mon != $current){
 		main::readingsSingleUpdate($hash,"month",$mon,1);		
 	}
@@ -134,8 +134,8 @@ sub update_weather{
 
 sub check_wind_alarm{
 	my ($hash) = @_;
-	my $windspeed = main::ReadingsVal($hash->{name}, "wind_speed", undef);
-	my $windalarm = main::ReadingsVal($hash->{name}, "wind_alarm", undef);
+	my $windspeed = main::ReadingsVal($hash->{NAME}, "wind_speed", undef);
+	my $windalarm = main::ReadingsVal($hash->{NAME}, "wind_alarm", undef);
 	given ($windalarm) {
 		when (0) {
 			if (($windspeed >= $wind_speed_threshold)){
@@ -144,19 +144,22 @@ sub check_wind_alarm{
 				foreach my $device (find_devices()) {
 					main::fhem("set $device wind_alarm");			
 				}
-			}
+			} 
 		}
 
 		when (1) {
 			if (($windspeed >= $wind_speed_threshold)){
 				main::readingsSingleUpdate($hash,"wind_alarm",1,1);		
 			} else {
-				if (main::ReadingsAge($hash->{name},"wind_speed",undef) > 600) {
+				if (main::ReadingsAge($hash->{NAME},"wind_speed",undef) > 600) {
 					main::readingsSingleUpdate($hash,"wind_alarm",0,1);		
 					main::Log(3,"Wind alarm ended.");
 				}
 			}						
 		}
+        when (undef) {
+		    main::readingsSingleUpdate($hash,"wind_alarm",0,0);		
+        }
 	}
 	return;
 }
@@ -178,3 +181,4 @@ sub find_devices{
 
 
 1;
+
