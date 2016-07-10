@@ -1,5 +1,0 @@
-#!/bin/bash
-set -e
-
- perl -MDevel::Cover test_suite.pm
- cover

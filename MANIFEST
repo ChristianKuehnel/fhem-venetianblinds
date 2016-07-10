@@ -1,6 +1,5 @@
 MANIFEST
-t/venetian.t
-t/pod-coverage.t
+t/Venetian.t
 t/manifest.t
 t/boilerplate.t
 t/00-load.t
@@ -8,10 +7,11 @@ t/VenetianBlindController.t
 t/VenetianMasterController.t
 t/pod.t
 t/fhem_test_mocks.pm
+t/perl_critic.t
 README.md
 LICENSE
-lib/venetian/VenetianRoomController.pm
-lib/venetian/VenetianBlindController.pm
-lib/venetian/VenetianMasterController.pm
-lib/99_Venetian.pm
+lib/VenetianBlinds/VenetianRoomController.pm
+lib/VenetianBlinds/VenetianBlindController.pm
+lib/VenetianBlinds/VenetianMasterController.pm
+lib/Venetian.pm
 Makefile.PL

@@ -8,7 +8,7 @@
 use strict;
 use warnings;
 use experimental "smartmatch";
-
+use Devel::StackTrace;
 package main;
 
 
@@ -38,7 +38,7 @@ print "Log: $_[0] , $_[1] \n";
 # fhem command ##########################
 sub fhem{
     my ($cmd) = @_;
-    ok($cmd ~~ @fhem_expected_list, "fhem $cmd");
+    ok($cmd ~~ @fhem_expected_list, "fhem $cmd") or diag(Devel::StackTrace->new->as_string);
     push(@fhem_history,$cmd);
     return $fhem_list{$cmd};  
 }

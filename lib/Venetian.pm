@@ -15,8 +15,6 @@ use VenetianBlinds::VenetianMasterController;
 use VenetianBlinds::VenetianRoomController;
 use VenetianBlinds::VenetianBlindController;
 
-our $VERSION = '0.1.0';
-
 my %valid_types = (
 	"master" =>"VenetianMasterController",
 	"room" => "VenetianRoomController",

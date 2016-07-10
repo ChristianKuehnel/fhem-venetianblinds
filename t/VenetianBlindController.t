@@ -13,11 +13,10 @@ use Test::More;
 use Time::HiRes "gettimeofday";
 use Test::MockModule;
 
-use lib "t"; 
-use fhem_test_mocks;
-
 use VenetianBlinds::VenetianBlindController;
 
+use lib "t"; 
+use fhem_test_mocks;
 
 ##############################################################################################
 sub test_VenetianBlindController {
@@ -38,6 +37,7 @@ test_VenetianBlindController();
 
 ##############################################################################################
 sub test_Define {
+	note( "test case: ".(caller(0))[3] );	
 	my $hash = {}; 
 	my $a = [];
 	my $h = {
@@ -57,6 +57,7 @@ sub test_Define {
 }
 
 sub test_Set_questionsmark {
+	note( "test case: ".(caller(0))[3] );	
 	my $hash = {}; 
 	my $a = ["irgendwas","?"];
 	my $h = {};
@@ -65,6 +66,7 @@ sub test_Set_questionsmark {
 }
 
 sub test_move_blinds_no_movement {
+	note( "test case: ".(caller(0))[3] );	
 	main::reset_mocks();
 	my $hash = {
 		"device" => "shadow"
@@ -76,6 +78,7 @@ sub test_move_blinds_no_movement {
 }
 
 sub test_move_blinds_up_no_slats {
+	note( "test case: ".(caller(0))[3] );	
 	main::reset_mocks();
 	my $hash = {
 		"device" => "shadow"
@@ -91,6 +94,7 @@ sub test_move_blinds_up_no_slats {
 
 
 sub test_move_both {
+	note( "test case: ".(caller(0))[3] );	
 	main::reset_mocks();
 	my $hash = {
 		"device" => "shadow"
@@ -117,6 +121,7 @@ sub test_move_both {
 }
 
 sub test_wind_alarm_vbc {
+	note( "test case: ".(caller(0))[3] );	
 	main::reset_mocks();
 	my $hash = {
 		"device" => "shadow"
@@ -130,6 +135,7 @@ sub test_wind_alarm_vbc {
 }
 
 sub test_set_scene {
+	note( "test case: ".(caller(0))[3] );	
 	main::reset_mocks();
 	my $hash = {
 		"device" => "shadow",
@@ -146,11 +152,13 @@ sub test_set_scene {
 }
 
 sub test_update_automatic_off {
+	note( "test case: ".(caller(0))[3] );	
+	main::reset_mocks();
 	my $newScene = undef;
 	my $master = "YourGrace";
 	
-    my $module = Test::MockModule->new('VenetianBlindController');
-    $module->mock('set_scene', sub { 
+    my $module = Test::MockModule->new('VenetianBlinds::VenetianBlindController');
+    $module->mock(set_scene => sub { 
 		my ($hash,$scene,$force) = @_;
         $newScene = $scene; });
 	my $hash = {
@@ -169,15 +177,18 @@ sub test_update_automatic_off {
 }
 
 sub test_update_automatic_down {
+	note( "test case: ".(caller(0))[3] );	
+	main::reset_mocks();
 	my $newScene = undef;
 	my $master = "YourGrace";
 	
-    my $module = Test::MockModule->new('VenetianBlindController');
-    $module->mock('set_scene', sub { 
+    my $module = Test::MockModule->new('VenetianBlinds::VenetianBlindController');
+    $module->mock(set_scene => sub { 
 		my ($hash,$scene,$force) = @_;
         $newScene = $scene; 
 	  	add_reading("its_me","scene",$newScene);          
-    });
+	});
+	
 	my $hash = {
 		"NAME" => "its_me",
 		"device" => "shadow2",
@@ -189,7 +200,7 @@ sub test_update_automatic_down {
 		"elevation_end" => 80,
 		"month_start" => 5,
 		"month_end" => 10,
-};
+	};
 	add_reading($master, "sun_elevation", 40);
 	add_reading($master, "sun_azimuth", 50);
 	add_reading($master, "wind_speed", 5);

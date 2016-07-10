@@ -6,7 +6,7 @@ use ExtUtils::MakeMaker;
 WriteMakefile(
     NAME             => 'venetian',
     AUTHOR           => q{Christian Kühnel <christian.kuehnel@gmail.com>},
-    VERSION_FROM     => 'lib/Venetian.pm',
+    VERSION		     => '0.1.0',
     #ABSTRACT_FROM    => 'lib/Venetian.pm',
     LICENSE          => 'Apache_2_0',
     PL_FILES         => {},
@@ -20,6 +20,7 @@ WriteMakefile(
         'Time::HiRes' => 0,
         'Test::Perl::Critic' => 0,
         'experimental' => 0,
+        'Test::Pod' => 0,
     },
     PREREQ_PM => {
         #'ABC'              => 1.6,

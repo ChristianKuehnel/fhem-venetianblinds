@@ -12,7 +12,7 @@ use experimental "smartmatch";
 use Test::More;
 use Time::HiRes "gettimeofday";
  
-use_ok( "VenetianBlinds::VenetianMasterController" );
+use VenetianBlinds::VenetianMasterController;
 
 use lib "t"; 
 use fhem_test_mocks;
@@ -20,7 +20,7 @@ use fhem_test_mocks;
 #package main;
 
 ##############################################################################################
-sub test_VenetianMasterController() {
+sub test_VenetianMasterController {
 	test_update_calendar();
 	test_update_twilight();
 	test_update_weather();
@@ -34,7 +34,7 @@ test_VenetianMasterController();
 
 ##############################################################################################
 
-sub test_update_calendar(){
+sub test_update_calendar{
 	main::reset_mocks();
 	main::add_reading("myname","month","0");
 	my $hash = {
@@ -48,7 +48,7 @@ sub test_update_calendar(){
 	is(scalar get_timer_list(),1);
 }
 
-sub test_update_twilight(){
+sub test_update_twilight{
 	main::reset_mocks();
 	my $hash = {
 		"NAME" => "RogerRabbit",
@@ -64,7 +64,7 @@ sub test_update_twilight(){
 	
 }
 
-sub test_update_weather(){
+sub test_update_weather{
 	main::reset_mocks();
 	my $hash = {
 		"NAME" => "JollyJumper",

@@ -5,12 +5,13 @@
 #
 ##############################################
 
-package VenetianBlindController;
-
 use v5.10.1;
 use strict;
 use warnings;
 use experimental "smartmatch";
+
+package VenetianBlindController;
+
 
 # constants ########################
 
@@ -217,4 +218,5 @@ sub get_position{
     }
 	return ($1,$2);
 }
-1;
+
+1; # end module

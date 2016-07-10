@@ -12,5 +12,3 @@ BEGIN {
     use_ok( 'VenetianBlinds::VenetianRoomController' ) || print "Bail out!\n";
     use_ok( 'VenetianBlinds::VenetianMasterController' ) || print "Bail out!\n";
 }
-
-diag( "Testing Venetian $Venetian::VERSION, Perl $], $^X" );
