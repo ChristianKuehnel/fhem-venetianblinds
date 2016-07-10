@@ -11,12 +11,11 @@ use warnings;
 use POSIX;
 use experimental "smartmatch";
 
+use VenetianBlinds::VenetianMasterController;
+use VenetianBlinds::VenetianRoomController;
+use VenetianBlinds::VenetianBlindController;
 
-use venetianblinds::VenetianMasterController;
-use venetianblinds::VenetianRoomController;
-use venetianblinds::VenetianBlindController;
-
-package main;
+our $VERSION = '0.1.0';
 
 my %valid_types = (
 	"master" =>"VenetianMasterController",
@@ -79,4 +78,7 @@ sub vbc_call{
 	return $result;	
 }
 
+=head1 NAME
+some package doc
+=cut
 1;

@@ -12,10 +12,12 @@ use experimental "smartmatch";
 use Test::More;
 use Time::HiRes "gettimeofday";
  
-use VenetianMasterController;
+use_ok( "VenetianBlinds::VenetianMasterController" );
+
+use lib "t"; 
 use fhem_test_mocks;
 
-package main;
+#package main;
 
 ##############################################################################################
 sub test_VenetianMasterController() {
@@ -24,7 +26,11 @@ sub test_VenetianMasterController() {
 	test_update_weather();
 	test_find_devices();
 	test_wind_alarm();
+	
+	done_testing();	
 }
+
+test_VenetianMasterController();
 
 ##############################################################################################
 

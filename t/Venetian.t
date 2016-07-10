@@ -13,13 +13,18 @@ use experimental "smartmatch";
 use Test::More;
 use Time::HiRes "gettimeofday";
 
-load "99_Venetian2";
-package main;
+use_ok("Venetian");
+
 
 ##############################################################################################
 sub test_venetian2(){
 	test_Set();
+	
+	done_testing();
 }
+
+test_venetian2();
+
 ##############################################################################################
 sub test_Set() {
 	my $hash = {

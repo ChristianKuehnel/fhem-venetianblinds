@@ -12,13 +12,15 @@ use experimental "smartmatch";
 use Test::More;
 use Time::HiRes "gettimeofday";
 use Test::MockModule;
- 
-use VenetianBlindController;
 
-package main;
+use lib "t"; 
+use fhem_test_mocks;
+
+use VenetianBlinds::VenetianBlindController;
+
 
 ##############################################################################################
-sub test_VenetianBlindController() {
+sub test_VenetianBlindController {
 	test_Define();
 	test_Set_questionsmark();
 	test_move_blinds_no_movement();
@@ -28,7 +30,11 @@ sub test_VenetianBlindController() {
 	test_set_scene();
 	test_update_automatic_off();
 	test_update_automatic_down();
+	
+	done_testing();
 }
+
+test_VenetianBlindController();
 
 ##############################################################################################
 sub test_Define {

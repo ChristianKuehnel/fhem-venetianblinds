@@ -19,7 +19,7 @@ my @fhem_expected_list = ();
 my @fhem_history = ();
 my @timer_list = ();
 
-sub reset_mocks(){
+sub reset_mocks{
 	%readings = ();
 	%fhem_list = ();
 	@timer_list = ();
@@ -70,19 +70,20 @@ sub InternalTimer{
 	ok(scalar @timer_list > 0);
 }
 
-sub trigger_timer(){
-	my $timer = undef;
+sub trigger_timer{
 	ok(scalar @timer_list > 0);
 	my @oldtimers = @timer_list;
 	@timer_list = ();
-	foreach $timer (@oldtimers){
-	    no strict "refs";
+	foreach my $timer (@oldtimers){
+ 		## no critic
+ 	    no strict "refs";
 	    &{$timer->{func}}($timer->{param});
 	    use strict "refs";	}
+		## use critic
 }
 
 
-sub get_timer_list(){
+sub get_timer_list{
 	return @timer_list;
 };
 
@@ -126,15 +127,15 @@ sub readingsSingleUpdate{
 }		
 
 
-sub readingsBeginUpdate($){
+sub readingsBeginUpdate{
 	#not sure how to mock this...
 }
 
-sub readingsEndUpdate($){
+sub readingsEndUpdate{
 	#not sure how to mock this...
 }
 
-sub readingsBulkUpdate($$$){
+sub readingsBulkUpdate{
 	my ($hash, $reading, $value) = @_;
 	my $device = $hash->{NAME};
 	ok(defined $device);
