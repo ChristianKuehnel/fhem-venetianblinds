@@ -14,7 +14,7 @@ WriteMakefile(
     CONFIGURE_REQUIRES => {
         'ExtUtils::MakeMaker' => 0,
     },
-    TEST_REQUIRES => {
+    BUILD_REQUIRES => {
         'Test::More' => 0,
         'Test::MockModule' => 0,
         'Time::HiRes' => 0,
