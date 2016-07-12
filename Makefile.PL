@@ -20,6 +20,7 @@ WriteMakefile(
         'Time::HiRes' => 0,
         'Test::Perl::Critic' => 0,
         'Test::Pod' => 0,
+        'Devel::Cover::Report::Coveralls' => 0,
     },
     PREREQ_PM => {
         'experimental' => 0,
