@@ -5,7 +5,7 @@
 #
 ##############################################
 
-package VenetianMasterController;
+package VenetianBlinds::VenetianMasterController;
 use v5.14;
 use strict;
 use warnings;

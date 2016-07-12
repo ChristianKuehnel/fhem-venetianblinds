@@ -5,7 +5,7 @@
 #
 ##############################################
 
-package VenetianRoomController;
+package VenetianBlinds::VenetianRoomController;
 
 use v5.10.1;
 use strict;

@@ -10,7 +10,7 @@ use strict;
 use warnings;
 use experimental "smartmatch";
 
-package VenetianBlindController;
+package VenetianBlinds::VenetianBlindController;
 
 
 # constants ########################
@@ -189,7 +189,7 @@ sub process_queue {
 	if (!defined $hash->{queue}) { return; };
 		
 	if (get_power($hash) > $power_threshold) {
-		main::InternalTimer(main::gettimeofday()+1, "VenetianBlindController::process_queue", $hash, 1);        
+		main::InternalTimer(main::gettimeofday()+1, "VenetianBlinds::VenetianBlindController::process_queue", $hash, 1);        
 	} else {
 		main::fhem($hash->{queue});
 		delete $hash->{queue}

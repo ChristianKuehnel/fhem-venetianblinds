@@ -65,7 +65,7 @@ sub Venetian_Notify {
 
 sub vbc_call{
 	my ($func,$hash,$a,$h) = @_;
-	$func = "$hash->{type}::$func";
+	$func = "VenetianBlinds::$hash->{type}::$func";
 	my $result;
 	{
 		## no critic (ProhibitNoStrict)

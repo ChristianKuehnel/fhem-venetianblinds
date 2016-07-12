@@ -13,7 +13,7 @@ use Test::More;
 use Time::HiRes "gettimeofday";
 use Test::MockModule;
 
-use VenetianBlinds::VenetianBlindController;
+use VenetianBlinds::VenetianBlindController ;
 
 use lib "t"; 
 use fhem_test_mocks;
@@ -47,7 +47,7 @@ sub test_Define {
 		"azimuth" => "80-190",
 		"months" => "5-10",
 	};
-	VenetianBlindController::Define($hash,$a,$h);
+	VenetianBlinds::VenetianBlindController::Define($hash,$a,$h);
 	is($hash->{master_controller},"mymaster");
 	is($hash->{device},"mydevice");
 	is($hash->{azimuth_start},80);
@@ -61,7 +61,7 @@ sub test_Set_questionsmark {
 	my $hash = {}; 
 	my $a = ["irgendwas","?"];
 	my $h = {};
-	my $answer = VenetianBlindController::Set($hash,$a,$h);
+	my $answer = VenetianBlinds::VenetianBlindController::Set($hash,$a,$h);
 	ok(defined $answer);
 }
 
@@ -73,7 +73,7 @@ sub test_move_blinds_no_movement {
 	}; 
 	set_fhem_mock("get shadow position","Blind 97 Slat 30");
 	add_reading("shadow","position","Blind 97 Slat 30");
-	VenetianBlindController::move_blinds($hash,99,undef);	
+	VenetianBlinds::VenetianBlindController::move_blinds($hash,99,undef);	
 	ok(!defined $hash->{queue});
 }
 
@@ -87,7 +87,7 @@ sub test_move_blinds_up_no_slats {
 	add_reading("shadow","position","Blind 0 Slat 30");
 	add_reading("shadow","power","0W");
 	set_fhem_mock("set shadow positionBlinds 99",undef);
-	VenetianBlindController::move_blinds($hash,99,undef);	
+	VenetianBlinds::VenetianBlindController::move_blinds($hash,99,undef);	
 	ok(!defined $hash->{queue});
 	is(scalar @{get_fhem_history()},2);
 }
@@ -103,7 +103,7 @@ sub test_move_both {
 	add_reading("shadow","position","Blind 0 Slat 30");
 	add_reading("shadow","power","90 W");
 	set_fhem_mock("set shadow positionBlinds 50",undef);
-	VenetianBlindController::move_blinds($hash,50,50);	
+	VenetianBlinds::VenetianBlindController::move_blinds($hash,50,50);	
 	ok(defined $hash->{queue});
 	is(scalar @{get_fhem_history()},2);
 
@@ -130,7 +130,7 @@ sub test_wind_alarm_vbc {
 	add_reading("shadow","power","0 W");
 	set_fhem_mock("get shadow position","Blind 0 Slat 30");
 	set_fhem_mock("set shadow positionBlinds 99",undef);
-	VenetianBlindController::wind_alarm($hash);
+	VenetianBlinds::VenetianBlindController::wind_alarm($hash);
 	is(scalar @{get_fhem_history()},2);	
 }
 
@@ -147,7 +147,7 @@ sub test_set_scene {
 	add_reading($hash->{NAME},"automatic",1);
 	set_fhem_mock("get shadow position","Blind 0 Slat 30");
 	set_fhem_mock("set shadow positionBlinds 99",undef);
-	VenetianBlindController::set_scene($hash,"open");
+	VenetianBlinds::VenetianBlindController::set_scene($hash,"open");
 	is(scalar @{get_fhem_history()},2,join(", ",@{get_fhem_history()}));		
 }
 
@@ -173,7 +173,7 @@ sub test_update_automatic_off {
 	add_reading($master, "cloud_index", 1);
 	add_reading($master, "month", 7);
 	add_reading($hash->{NAME}, "automatic", 0);
-  	VenetianBlindController::update_automatic($hash,0);              
+  	VenetianBlinds::VenetianBlindController::update_automatic($hash,0);              
 }
 
 sub test_update_automatic_down {
@@ -209,68 +209,68 @@ sub test_update_automatic_down {
 	add_reading($master, "month", 3);
 	add_reading($hash->{NAME}, "automatic", 1);
 	add_reading($hash->{NAME}, "scene", "closed");
-  	VenetianBlindController::update_automatic($hash,0);
+  	VenetianBlinds::VenetianBlindController::update_automatic($hash,0);
   	is($newScene,undef);          
 
 	$newScene = undef;
 	add_reading($master, "month", 7);
-  	VenetianBlindController::update_automatic($hash,0);
+  	VenetianBlinds::VenetianBlindController::update_automatic($hash,0);
   	is($newScene,"shaded");          
 
 	$newScene = undef;
 	add_reading($master, "cloud_index", 7);
-  	VenetianBlindController::update_automatic($hash,0);
+  	VenetianBlinds::VenetianBlindController::update_automatic($hash,0);
   	is($newScene,"open");          
 	add_reading($master, "cloud_index", 5);
 	
 	$newScene = undef;
 	add_reading($hash->{NAME},"scene","closed");
 	add_reading($master, "sun_elevation", 3);
-  	VenetianBlindController::update_automatic($hash,0);
+  	VenetianBlinds::VenetianBlindController::update_automatic($hash,0);
   	is($newScene,"open");          	
 
 	$newScene = undef;
 	add_reading($master, "sun_elevation", 100);
-  	VenetianBlindController::update_automatic($hash,1);
+  	VenetianBlinds::VenetianBlindController::update_automatic($hash,1);
   	is($newScene,"open");          	
 	add_reading($master, "sun_elevation", 50);
 
 	$newScene = undef;
 	add_reading($master, "cloud_index", 5);
-  	VenetianBlindController::update_automatic($hash,1);
+  	VenetianBlinds::VenetianBlindController::update_automatic($hash,1);
   	is($newScene,"open");          
 	add_reading($master, "cloud_index", 2);
 
 	$newScene = undef;
 	add_reading($master, "sun_azimuth", 3);
-  	VenetianBlindController::update_automatic($hash,1);
+  	VenetianBlinds::VenetianBlindController::update_automatic($hash,1);
   	is($newScene,"open");          
 
 	$newScene = undef;
 	add_reading($master, "sun_azimuth", 120);
-  	VenetianBlindController::update_automatic($hash,1);
+  	VenetianBlinds::VenetianBlindController::update_automatic($hash,1);
   	is($newScene,"open");          
 	add_reading($master, "sun_azimuth", 60);
 
 	$newScene = undef;
-	VenetianBlindController::update_automatic($hash,0);
+	VenetianBlinds::VenetianBlindController::update_automatic($hash,0);
   	is($newScene,"shaded");          
 
 	#repeast same command -> do not move anything
 	$newScene = undef;
-	VenetianBlindController::update_automatic($hash,0);
+	VenetianBlinds::VenetianBlindController::update_automatic($hash,0);
   	is(ReadingsVal($hash->{NAME},"scene",undef),"shaded");          
   	is($newScene,undef);          
 
 	$newScene = undef;
 	add_reading($master, "wind_alarm", 1);
-	VenetianBlindController::update_automatic($hash,0);
+	VenetianBlinds::VenetianBlindController::update_automatic($hash,0);
   	is($newScene,undef);          
 	add_reading($master, "wind_alarm", 0);
 
 	$newScene = undef;
 	add_reading($hash->{NAME}, "automatic", 0);
-	VenetianBlindController::update_automatic($hash,0);
+	VenetianBlinds::VenetianBlindController::update_automatic($hash,0);
   	is($newScene,undef);          
 	add_reading($hash->{NAME}, "automatic", 1);
 
