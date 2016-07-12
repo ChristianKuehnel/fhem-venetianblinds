@@ -11,6 +11,16 @@ use warnings;
 use POSIX;
 use experimental "smartmatch";
 
+
+#add FHEM/lib to @INC if it's not allready included. Should rather be in fhem.pl than here though...
+BEGIN {
+	if (!grep(/FHEM\/lib$/,@INC)) {
+		foreach my $inc (grep(/FHEM$/,@INC)) {
+			push @INC,$inc."/lib";
+		};
+	};
+};
+
 use VenetianBlinds::VenetianMasterController;
 use VenetianBlinds::VenetianRoomController;
 use VenetianBlinds::VenetianBlindController;
