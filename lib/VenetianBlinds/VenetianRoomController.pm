@@ -17,10 +17,13 @@ use VenetianBlinds::Shared;
 ##############################################
 sub Define{
     my ($hash,$a,$h) = @_;
+    $hash->{STATE} = "OK";
+    return;
 }
 
 sub Notify {
     my ($hash, $devName, $events) = @_;
+    return;
 }
 
 sub Set{

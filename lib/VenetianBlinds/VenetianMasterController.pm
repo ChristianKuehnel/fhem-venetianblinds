@@ -36,6 +36,7 @@ sub Define{
 	$hash->{twilight} = $h->{twilight};
 	$hash->{weather} = $h->{weather};
     $hash->{wind_speed_threshold} = $h->{wind_speed_threshold};
+    $hash->{STATE} = "defined";
 	return;
 }
 
@@ -143,7 +144,8 @@ sub check_wind_alarm{
 			if (($windspeed >= $hash->{wind_speed_threshold})){
 				main::Log(3,"Wind alarm: $windspeed km/h");
 				main::readingsSingleUpdate($hash,"wind_alarm",1,1);		
-				VenetianBlinds::Shared::send_to_all("wind_alarm");			
+				VenetianBlinds::Shared::send_to_all("wind_alarm");	
+				$hash->{STATE} = "wind alarm";		
 			} 
 		}
 
@@ -154,6 +156,7 @@ sub check_wind_alarm{
 				if (main::ReadingsAge($hash->{NAME},"wind_speed",undef) > 600) {
 					main::readingsSingleUpdate($hash,"wind_alarm",0,1);		
 					main::Log(3,"Wind alarm ended.");
+                    $hash->{STATE} = "normal";      
 				}
 			}						
 		}
