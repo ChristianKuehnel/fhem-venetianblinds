@@ -119,7 +119,7 @@ sub test_move_both {
 	is(scalar @{get_fhem_history()},2);
 
 	reset_fhem_history();	
-    set_fhem_mock("get shadow smStatus","power:90.0 W");
+    set_fhem_mock("get shadow smStatus","power:65.3 W");
 	trigger_timer();
 	ok(defined $hash->{queue});
 	is(scalar @{get_fhem_history()},1);

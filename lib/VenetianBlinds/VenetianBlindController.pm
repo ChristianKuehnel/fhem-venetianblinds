@@ -218,7 +218,7 @@ sub get_power{
     my $power_reading = main::fhem("get $hash->{device} smStatus", undef);
     $power_reading =~ /power:([\d\.]+)\WW/;
     if (!defined $1){
-    	main::Log(1,"Error reading power level of $hash->{device}");
+    	main::Log(1,"Error reading power level of $hash->{device}:'$power_reading'");
     }
     return $1;
 }
