@@ -183,7 +183,7 @@ sub find_devices{
 	foreach my $device (split /\n/, $devstr) {
 		$device =~ s/^\s+|\s+$//g; # trim white spaces
 		if( length($device) > 0){ 
-			$device =~ /([\.\_\w]+)\s+(.+)$/;
+			$device =~ /^(\S+)\s+(\S+)$/;
 			my $devname = $1;
 			my $model = $2;
 			if ($model eq "VenetianBlindController"){
