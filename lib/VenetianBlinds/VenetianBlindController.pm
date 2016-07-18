@@ -215,8 +215,11 @@ sub process_queue {
 # wrappers around readings #############################
 sub get_power{
 	my ($hash) = @_;
-    my $power_reading = main::ReadingsVal($hash->{device}, "power", undef);
-    $power_reading =~ /([\d\.]+)\WW/;
+    my $power_reading = main::fhem("get $hash->{device} smStatus", undef);
+    $power_reading =~ /power:([\d\.]+)\WW/;
+    if (!defined $1){
+    	main::Log(1,"Error reading power level of $hash->{device}");
+    }
     return $1;
 }
 
