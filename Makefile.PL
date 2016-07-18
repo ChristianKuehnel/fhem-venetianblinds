@@ -41,6 +41,8 @@ fhem:
 	$(CP) lib/Venetian.pm $(FHEM_HOME)/FHEM/99_Venetian.pm
 	mkdir -p $(FHEM_HOME)/FHEM/lib/VenetianBlinds
 	$(CP) lib/VenetianBlinds/*.pm $(FHEM_HOME)/FHEM/lib/VenetianBlinds	
+	chown fhem:dialout $(FHEM_HOME)/FHEM/99_Venetian.pm 
+	chown fhem:dialout $(FHEM_HOME)/FHEM/lib/VenetianBlinds/*
 
 fhem_restart: fhem
 	service fhem stop
