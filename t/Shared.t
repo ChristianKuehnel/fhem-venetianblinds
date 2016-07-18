@@ -11,7 +11,7 @@ use v5.10.1;
 use experimental "smartmatch";
 use Test::More;
 use Time::HiRes "gettimeofday";
- 
+use Test::MockModule;
 use VenetianBlinds::Shared;
 
 use lib "t"; 
@@ -73,23 +73,20 @@ vbc.wz.sued_fenster      VenetianBlindController
 sub test_find_devices_in_room{
     note( (caller(0))[3] ); 
     main::reset_mocks();
-    main::set_fhem_mock("list .* type",
-        q{
-vbc.ku.fenster           VenetianBlindController
-vbc.sz.west_fenster      VenetianBlindController
-vbc.wz.sued_fenster      VenetianBlindController
-vbc.wz.west_fenster      VenetianBlindController
-        });
+    my $module = Test::MockModule->new('VenetianBlinds::Shared');
+    $module->mock(find_devices => sub{ return qw(dev1 dev2 dev3 dev4 dev5)} );
 
-    set_attr("vbc.ku.fenster","room","kitchen");
-    set_attr("vbc.sz.west_fenster","room","bathroom");
-    set_attr("vbc.wz.sued_fenster","room","kitchen,somethingelse");
-    set_attr("vbc.wz.west_fenster","room","daroom,kitchen,moreroom");
+    set_attr("dev1","room","kitchen");
+    set_attr("dev2","room","bathroom");
+    set_attr("dev3","room","kitchen,somethingelse");
+    set_attr("dev4","room","daroom,kitchen,moreroom");
+    set_attr("dev5","room","daroom,kitchen");
     my @device_list = VenetianBlinds::Shared::find_devices_in_room("kitchen");
-    is(scalar @device_list,3, join(" ",@device_list));
-    ok("vbc.ku.fenster" ~~ @device_list);
-    ok("vbc.wz.sued_fenster" ~~ @device_list);
-    ok("vbc.wz.west_fenster" ~~ @device_list);
+    is(scalar @device_list,4, join(" ",@device_list));
+    ok("dev1" ~~ @device_list);
+    ok("dev3" ~~ @device_list);
+    ok("dev4" ~~ @device_list);
+    ok("dev5" ~~ @device_list);
 }
 
 sub test_send_to_all_in_room {

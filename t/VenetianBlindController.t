@@ -39,6 +39,7 @@ test_VenetianBlindController();
 ##############################################################################################
 sub test_Define {
 	note( "test case: ".(caller(0))[3] );	
+    main::reset_mocks();
 	my $hash = {}; 
 	my $a = [];
 	my $h = {
@@ -59,6 +60,7 @@ sub test_Define {
 
 sub test_Set_questionsmark {
 	note( "test case: ".(caller(0))[3] );	
+    main::reset_mocks();
 	my $hash = {}; 
 	my $a = ["irgendwas","?"];
 	my $h = {};
@@ -162,7 +164,7 @@ sub test_set_scene {
 	add_reading($hash->{NAME},"automatic",1);
 	
 	set_fhem_mock("get shadow position","Blind 0 Slat 30");
-	set_fhem_mock("set shadow positionBlinds 99",undef);
+	set_fhem_mock("set shadow positionBlinds 99");
 
 	VenetianBlinds::VenetianBlindController::set_scene($hash,"open");
 

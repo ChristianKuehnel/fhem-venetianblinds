@@ -4,39 +4,19 @@
 # http://www.apache.org/licenses/LICENSE-2.0
 #
 ##############################################
+package VenetianBlinds::VenetianBlindController;
 
 use v5.10.1;
 use strict;
 use warnings;
 use experimental "smartmatch";
-
-package VenetianBlinds::VenetianBlindController;
+use VenetianBlinds::Shared "scenes";
 
 
 # constants ########################
 
-my $scenes = {
-	"open" => {
-        "blind" => 99,
-        "slat" => undef,   
-    },
-    "closed" => {
-        "blind" => 0,
-        "slat" => 0,   
-    },
-    "see_through" => {
-        "blind" => 0,
-        "slat" => 50,   
-    },
-    "shaded" => {
-        "blind" => 0,
-        "slat" => 30,   
-    },
-};
-
-my $blind_threshold =  5; #percentage points
-my $slat_threshold  =  5; #percentage points
-my $power_threshold = 10; #watts
+use constant blind_threshold =>  5; #percentage points
+use constant power_threshold => 10; #watts
 
 # FHEM commands ########################
 
@@ -64,7 +44,7 @@ sub Define{
 sub Set{
 	my ( $hash, $a,$h ) = @_;
 	my $cmd = $a->[1];
-	my @scene_list = keys %{$scenes};
+	my @scene_list = keys %{&scenes};
 	if ( $cmd eq "?" ){
 		my $result = "automatic:noArg wind_alarm:noArg stop:noArg";
 		foreach my $scene (@scene_list){
@@ -145,8 +125,8 @@ sub set_scene{
 	my $automatic = main::ReadingsVal($hash->{NAME}, "automatic", undef);
 	my $old_scene = main::ReadingsVal($hash->{NAME}, "scene", undef);
 
-	if (!defined $scenes->{$scene}){
-		main::Log(1, "undefined scene $scenes->{$scene}");
+	if (!defined &scenes->{$scene}){
+		main::Log(1, "undefined scene &scenes->{$scene}");
 	} else {
 		main::readingsSingleUpdate($hash,"scene",$scene,1);		
         if ($automatic) {
@@ -155,7 +135,7 @@ sub set_scene{
             $hash->{STATE} = "manual: $scene";
         }
         main::Log(3,"moving blinds $hash->{device} to scene $scene.");
-        move_blinds($hash, $scenes->{$scene}{blind}, $scenes->{$scene}{slat});	
+        move_blinds($hash, &scenes->{$scene}{blind}, &scenes->{$scene}{slat});	
 	}
 }
 
@@ -163,7 +143,7 @@ sub move_blinds{
 	my ($hash, $blind, $slat)= @_;
 	my ($current_blind, $current_slat) = get_position($hash);
 	if ( defined $blind and
-		abs($blind-$current_blind) > $blind_threshold ){
+		abs($blind-$current_blind) > &blind_threshold ){
 		main::fhem("set $hash->{device} positionBlinds $blind");
 		count_commands($hash);
 	}
@@ -202,7 +182,7 @@ sub process_queue {
 	my ($hash) = @_;
 	if (!defined $hash->{queue}) { return; };
 		
-	if (get_power($hash) > $power_threshold) {
+	if (get_power($hash) > &power_threshold) {
 		main::InternalTimer(main::gettimeofday()+1, "VenetianBlinds::VenetianBlindController::process_queue", $hash, 1);        
 	} else {
 		main::fhem($hash->{queue});
