@@ -116,7 +116,7 @@ sub test_move_both {
 	add_reading("mover","command_count","0");
 	VenetianBlinds::VenetianBlindController::move_blinds($hash,50,50);	
 	ok(defined $hash->{queue});
-	is(scalar @{get_fhem_history()},3);
+	is(scalar @{get_fhem_history()},2);
 
 	reset_fhem_history();	
 	set_fhem_mock("get shadow power","90 W");
