@@ -168,7 +168,6 @@ sub move_blinds{
 		count_commands($hash);
 	}
 	if ( defined $slat and 
-		abs($slat-$current_slat) > $slat_threshold and
 		$blind < 95 ){
 		enqueue_command($hash,"set $hash->{device} positionSlat $slat");
 	}
@@ -216,7 +215,7 @@ sub process_queue {
 # wrappers around readings #############################
 sub get_power{
 	my ($hash) = @_;
-    my $power_reading = main::ReadingsVal($hash->{device}, "power", undef);
+    my $power_reading = main::fhem("get $hash->{device} power", undef);
     $power_reading =~ /([\d\.]+)\WW/;
     return $1;
 }
