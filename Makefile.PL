@@ -36,11 +36,16 @@ ifndef FHEM_HOME
 FHEM_HOME = ~fhem
 endif
 
-fhem:
+fhem: 
 	$(NOECHO) $(ECHO) using fhem home directory: \"$(FHEM_HOME)\"
 	$(CP) lib/Venetian.pm $(FHEM_HOME)/FHEM/99_Venetian.pm
 	mkdir -p $(FHEM_HOME)/FHEM/lib/VenetianBlinds
 	$(CP) lib/VenetianBlinds/*.pm $(FHEM_HOME)/FHEM/lib/VenetianBlinds	
+
+fhem_restart: fhem
+	service fhem stop
+	sleep 5
+	service fhem start
 }
 };
 
