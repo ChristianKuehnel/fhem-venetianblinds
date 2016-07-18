@@ -27,6 +27,7 @@ sub test_VenetianMasterController {
 	test_find_devices();
 	test_wind_alarm();
 	test_stop_all();
+	test_send_to_all();
 	
 	done_testing();	
 }
@@ -150,6 +151,22 @@ sub test_stop_all{
 	main::set_fhem_mock("set shady2 stop");
 	
 	VenetianBlinds::VenetianMasterController::stop_all($hash);
+}
+
+sub test_send_to_all {
+    note( (caller(0))[3] ); 
+    main::reset_mocks();
+    main::set_fhem_mock("list .* type",
+        q{
+vbc.ku.fenster           VenetianBlindController
+vbc.sz.west_fenster      VenetianBlindController
+vbc.wz.sued_fenster      VenetianBlindController
+        });
+    set_fhem_mock("set vbc.ku.fenster stop",undef);
+    set_fhem_mock("set vbc.sz.west_fenster stop",undef);
+    set_fhem_mock("set vbc.wz.sued_fenster stop",undef);
+    VenetianBlinds::VenetianMasterController::stop_all("test");
+    is(scalar( @{get_fhem_history()} ),4);
 }
 
 1;

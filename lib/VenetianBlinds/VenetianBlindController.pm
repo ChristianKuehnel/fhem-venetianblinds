@@ -195,7 +195,7 @@ sub count_commands{
 sub enqueue_command {
 	my ($hash,$cmd) = @_;
 	$hash->{queue} = $cmd;
-    process_queue($hash);        
+        main::InternalTimer(main::gettimeofday()+1, "VenetianBlinds::VenetianBlindController::process_queue", $hash, 1);        
 }
 
 sub process_queue {
