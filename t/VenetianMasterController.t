@@ -93,12 +93,19 @@ sub test_find_devices{
 	note( (caller(0))[3] );	
 	main::reset_mocks();
 	main::set_fhem_mock("list .* type",
-		"my.dev_shady1   VenetianBlindController\nshady2.abc    VenetianBlindController\nother Some different type of thing");
+		q{
+vbc.ku.fenster           VenetianBlindController
+vbc.sz.west_fenster      VenetianBlindController
+vbc.wz.sued_fenster      VenetianBlindController
+vbc.wz.sued_tuer         VenetianBlindController
+vbc.wz.west_fenster      VenetianBlindController
+		});
 	
 	my @device_list = VenetianBlinds::VenetianMasterController::find_devices();
-	is(scalar @device_list,2);
-	ok("my.dev_shady1" ~~ @device_list);
-	ok("shady2.abc" ~~ @device_list);
+	is(scalar @device_list,5);
+	ok("vbc.ku.fenster" ~~ @device_list);
+	ok("vbc.sz.west_fenster" ~~ @device_list);
+	ok("vbc.wz.sued_fenster" ~~ @device_list);
 	
 }
 
