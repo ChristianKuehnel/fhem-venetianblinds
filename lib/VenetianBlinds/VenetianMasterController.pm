@@ -50,6 +50,8 @@ sub Set{
 		trigger_update($hash);
 	} elsif ($cmd eq "stop_all") {
 		stop_all($hash);
+    } elsif ($cmd eq "automatic_all") {
+        automatic_all($hash);
 	} else {
 		return "unknown command $cmd";
 	}
@@ -162,6 +164,12 @@ sub check_wind_alarm{
         }
 	}
 	return;
+}
+
+
+sub automatic_all{
+    my ($hash) = @_;
+    send_to_all("automatic");   
 }
 
 sub stop_all{

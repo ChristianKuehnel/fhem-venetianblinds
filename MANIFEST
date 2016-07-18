@@ -1,7 +1,6 @@
 MANIFEST
 t/Venetian.t
 t/manifest.t
-t/boilerplate.t
 t/00-load.t
 t/VenetianBlindController.t
 t/VenetianMasterController.t

@@ -27,6 +27,7 @@ sub test_VenetianMasterController {
 	test_find_devices();
 	test_wind_alarm();
 	test_stop_all();
+    test_automatic_all();
 	test_send_to_all();
 	
 	done_testing();	
@@ -151,6 +152,20 @@ sub test_stop_all{
 	main::set_fhem_mock("set shady2 stop");
 	
 	VenetianBlinds::VenetianMasterController::stop_all($hash);
+}
+
+sub test_automatic_all{
+    note( (caller(0))[3] ); 
+    main::reset_mocks();
+    my $hash = {
+        "NAME" => "stopper",
+    };
+    main::set_fhem_mock("list .* type",
+        "shady1   VenetianBlindController\nshady2   VenetianBlindController");
+    main::set_fhem_mock("set shady1 automatic");
+    main::set_fhem_mock("set shady2 automatic");
+    
+    VenetianBlinds::VenetianMasterController::automatic_all($hash);
 }
 
 sub test_send_to_all {
