@@ -195,7 +195,7 @@ sub count_commands{
 sub enqueue_command {
 	my ($hash,$cmd) = @_;
 	$hash->{queue} = $cmd;
-    main::InternalTimer(main::gettimeofday()+2, "VenetianBlinds::VenetianBlindController::process_queue", $hash, 1);        
+    process_queue($hash);        
 }
 
 sub process_queue {
@@ -215,7 +215,7 @@ sub process_queue {
 # wrappers around readings #############################
 sub get_power{
 	my ($hash) = @_;
-    my $power_reading = main::fhem("get $hash->{device} power", undef);
+    my $power_reading = main::ReadingsVal($hash->{device}, "power", undef);
     $power_reading =~ /([\d\.]+)\WW/;
     return $1;
 }
