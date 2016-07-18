@@ -70,27 +70,35 @@ sub test_move_blinds_no_movement {
 	note( "test case: ".(caller(0))[3] );	
 	main::reset_mocks();
 	my $hash = {
+		"NAME" => "mover",
 		"device" => "shadow"
 	}; 
 	set_fhem_mock("get shadow position","Blind 97 Slat 30");
 	add_reading("shadow","position","Blind 97 Slat 30");
+	add_reading("mover","count_commands","0");
 	VenetianBlinds::VenetianBlindController::move_blinds($hash,99,undef);	
 	ok(!defined $hash->{queue});
+	is(main::ReadingsVal("mover","count_commands",undef),0);
 }
 
 sub test_move_blinds_up_no_slats {
 	note( "test case: ".(caller(0))[3] );	
 	main::reset_mocks();
 	my $hash = {
+		"NAME" => "mover",
 		"device" => "shadow"
 	};
 	set_fhem_mock("get shadow position","Blind 0 Slat 30");
 	add_reading("shadow","position","Blind 0 Slat 30");
 	add_reading("shadow","power","0W");
+	add_reading("mover","command_count","0");
 	set_fhem_mock("set shadow positionBlinds 99",undef);
+
 	VenetianBlinds::VenetianBlindController::move_blinds($hash,99,undef);	
+
 	ok(!defined $hash->{queue});
 	is(scalar @{get_fhem_history()},2);
+	is(main::ReadingsVal("mover","command_count",undef),1);
 }
 
 
@@ -98,12 +106,14 @@ sub test_move_both {
 	note( "test case: ".(caller(0))[3] );	
 	main::reset_mocks();
 	my $hash = {
+		"NAME" => "mover",
 		"device" => "shadow"
 	};
 	set_fhem_mock("get shadow position","Blind 0 Slat 30");
 	add_reading("shadow","position","Blind 0 Slat 30");
 	add_reading("shadow","power","90 W");
 	set_fhem_mock("set shadow positionBlinds 50",undef);
+	add_reading("mover","command_count","0");
 	VenetianBlinds::VenetianBlindController::move_blinds($hash,50,50);	
 	ok(defined $hash->{queue});
 	is(scalar @{get_fhem_history()},2);
@@ -119,12 +129,14 @@ sub test_move_both {
 	set_fhem_mock("set shadow positionSlat 50",undef);
 	trigger_timer();
 	ok(!defined $hash->{queue});	
+	is(main::ReadingsVal("mover","command_count",undef),2);
 }
 
 sub test_wind_alarm_vbc {
 	note( "test case: ".(caller(0))[3] );	
 	main::reset_mocks();
 	my $hash = {
+		"NAME" => "some_random_name",
 		"device" => "shadow"
 	};
 	add_reading("shadow","position","Blind 0 Slat 30");
@@ -146,10 +158,14 @@ sub test_set_scene {
 	add_reading("shadow","power","0 W");
 	add_reading($hash->{NAME},"scene","closed");
 	add_reading($hash->{NAME},"automatic",1);
+	
 	set_fhem_mock("get shadow position","Blind 0 Slat 30");
 	set_fhem_mock("set shadow positionBlinds 99",undef);
+
 	VenetianBlinds::VenetianBlindController::set_scene($hash,"open");
+
 	is(scalar @{get_fhem_history()},2,join(", ",@{get_fhem_history()}));		
+	is(main::ReadingsVal("my_name","command_count",undef),1);
 }
 
 sub test_update_automatic_off {
@@ -170,7 +186,7 @@ sub test_update_automatic_off {
 	add_reading($master, "sun_elevation", 40);
 	add_reading($master, "sun_azimuth", 60);
 	add_reading($master, "wind_speed", 5);
-	add_reading($master, "wind_alarm", "");
+	add_reading($master, "wind_alarm", undef);
 	add_reading($master, "cloud_index", 1);
 	add_reading($master, "month", 7);
 	add_reading($hash->{NAME}, "automatic", 0);
@@ -288,6 +304,7 @@ sub test_stop {
 
 	VenetianBlinds::VenetianBlindController::stop($hash);
 	ok(!defined $hash->{queue});
+	is(main::ReadingsVal("its_me","command_count",undef),1);
 	
 }
 

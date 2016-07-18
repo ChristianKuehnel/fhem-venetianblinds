@@ -94,8 +94,9 @@ sub ReadingsVal {
     ok(defined $device,"defined $device");
     ok(defined $reading,"defined $device reading $reading");
     my $value = $readings{$device}{$reading}{value};
-    #print "readings $device, $reading, $value \n";
-    #ok(defined $value,"ReadingsVal $device:$reading");
+	if (!defined $value) {
+		return $default;
+	}
     return $value;
 }
 

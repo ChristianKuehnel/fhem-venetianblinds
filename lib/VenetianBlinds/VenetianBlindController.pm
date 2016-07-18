@@ -165,6 +165,7 @@ sub move_blinds{
 	if ( defined $blind and
 		abs($blind-$current_blind) > $blind_threshold ){
 		main::fhem("set $hash->{device} positionBlinds $blind");
+		count_commands($hash);
 	}
 	if ( defined $slat and 
 		abs($slat-$current_slat) > $slat_threshold and
@@ -181,7 +182,14 @@ sub wind_alarm{
 sub stop {
 	my ($hash) = @_;
 	main::fhem("set $hash->{device} stop");	
+	count_commands($hash);
 	delete $hash->{queue};
+}
+
+sub count_commands{
+	my ($hash) = @_;
+    my $count = main::ReadingsVal($hash->{NAME}, "command_count", 0) +1;
+	main::readingsSingleUpdate($hash,"command_count",$count,0);		
 }
 
 # queing of commans ######################
@@ -200,6 +208,7 @@ sub process_queue {
 	} else {
 		main::fhem($hash->{queue});
 		delete $hash->{queue};
+		count_commands($hash);
 	}
 }
 
