@@ -45,9 +45,11 @@ sub Set{
 	my ($hash,$a,$h) = @_;
 	my $cmd = $a->[1];
 	if ($cmd eq "?"){
-		return "trigger_update:noArg";
+		return "trigger_update:noArg stop_all:noArg";
 	} elsif ($cmd eq "trigger_update") {
 		trigger_update($hash);
+	} elsif ($cmd eq "stop_all") {
+		stop_all($hash);
 	} else {
 		return "unknown command $cmd";
 	}
@@ -141,9 +143,7 @@ sub check_wind_alarm{
 			if (($windspeed >= $wind_speed_threshold)){
 				main::Log(3,"Wind alarm: $windspeed km/h");
 				main::readingsSingleUpdate($hash,"wind_alarm",1,1);		
-				foreach my $device (find_devices()) {
-					main::fhem("set $device wind_alarm");			
-				}
+				send_to_all("wind_alarm");			
 			} 
 		}
 
@@ -162,6 +162,19 @@ sub check_wind_alarm{
         }
 	}
 	return;
+}
+
+sub stop_all{
+	my ($hash) = @_;
+	send_to_all("stop");
+	
+}
+
+sub send_to_all{
+	my ($cmd) = @_;
+	foreach my $device (find_devices()) {
+		main::fhem("set $device $cmd");			
+	}
 }
 
 sub find_devices{

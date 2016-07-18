@@ -26,6 +26,7 @@ sub test_VenetianMasterController {
 	test_update_weather();
 	test_find_devices();
 	test_wind_alarm();
+	test_stop_all();
 	
 	done_testing();	
 }
@@ -35,6 +36,7 @@ test_VenetianMasterController();
 ##############################################################################################
 
 sub test_update_calendar{
+	note( (caller(0))[3] );	
 	main::reset_mocks();
 	main::add_reading("myname","month","0");
 	my $hash = {
@@ -49,6 +51,7 @@ sub test_update_calendar{
 }
 
 sub test_update_twilight{
+	note( (caller(0))[3] );	
 	main::reset_mocks();
 	my $hash = {
 		"NAME" => "RogerRabbit",
@@ -65,6 +68,7 @@ sub test_update_twilight{
 }
 
 sub test_update_weather{
+	note( (caller(0))[3] );	
 	main::reset_mocks();
 	my $hash = {
 		"NAME" => "JollyJumper",
@@ -86,6 +90,7 @@ sub test_update_weather{
 }
 
 sub test_find_devices{
+	note( (caller(0))[3] );	
 	main::reset_mocks();
 	main::set_fhem_mock("list .* type",
 		"shady1   VenetianBlindController\nshady2    VenetianBlindController\nother Some different type of thing");
@@ -98,6 +103,7 @@ sub test_find_devices{
 }
 
 sub test_wind_alarm{
+	note( (caller(0))[3] );	
 	main::reset_mocks();
 	main::set_fhem_mock("list .* type",
 		"shady1   VenetianBlindController");
@@ -125,5 +131,18 @@ sub test_wind_alarm{
 	
 }
 
+sub test_stop_all{
+	note( (caller(0))[3] );	
+	main::reset_mocks();
+	my $hash = {
+		"NAME" => "stopper",
+	};
+	main::set_fhem_mock("list .* type",
+		"shady1   VenetianBlindController\nshady2   VenetianBlindController");
+	main::set_fhem_mock("set shady1 stop");
+	main::set_fhem_mock("set shady2 stop");
+	
+	VenetianBlinds::VenetianMasterController::stop_all($hash);
+}
 
 1;

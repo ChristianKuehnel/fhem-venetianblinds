@@ -66,7 +66,7 @@ sub Set{
 	my $cmd = $a->[1];
 	my @scene_list = keys %{$scenes};
 	if ( $cmd eq "?" ){
-		my $result = "automatic:noArg wind_alarm:noArg";
+		my $result = "automatic:noArg wind_alarm:noArg stop:noArg";
 		foreach my $scene (@scene_list){
 			$result .= " $scene:noArg";
 		}
@@ -81,6 +81,8 @@ sub Set{
 		delete $hash->{scences};
 	} elsif ($cmd eq "wind_alarm") {
 		wind_alarm($hash);
+	} elsif ($cmd eq "stop") {
+		stop($hash);
 	} else {
 		return "unknown command $cmd";
 	}
@@ -176,6 +178,11 @@ sub wind_alarm{
 	move_blinds($hash,99,undef);
 }
 
+sub stop {
+	my ($hash) = @_;
+	main::fhem("set $hash->{device} stop");	
+	delete $hash->{queue};
+}
 
 # queing of commans ######################
 sub enqueue_command {
@@ -192,7 +199,7 @@ sub process_queue {
 		main::InternalTimer(main::gettimeofday()+1, "VenetianBlinds::VenetianBlindController::process_queue", $hash, 1);        
 	} else {
 		main::fhem($hash->{queue});
-		delete $hash->{queue}
+		delete $hash->{queue};
 	}
 }
 

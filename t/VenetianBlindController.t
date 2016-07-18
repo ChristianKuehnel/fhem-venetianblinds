@@ -29,6 +29,7 @@ sub test_VenetianBlindController {
 	test_set_scene();
 	test_update_automatic_off();
 	test_update_automatic_down();
+	test_stop();
 	
 	done_testing();
 }
@@ -273,8 +274,21 @@ sub test_update_automatic_down {
 	VenetianBlinds::VenetianBlindController::update_automatic($hash,0);
   	is($newScene,undef);          
 	add_reading($hash->{NAME}, "automatic", 1);
+}
 
+sub test_stop {
+	note( "test stop: ".(caller(0))[3] );	
+	main::reset_mocks();
+	my $hash = {
+		"NAME" => "its_me",
+		"device" => "shadow2",
+		"queue" => "some command",
+	};
+	set_fhem_mock("set shadow2 stop",undef);
 
+	VenetianBlinds::VenetianBlindController::stop($hash);
+	ok(!defined $hash->{queue});
+	
 }
 
 1;
