@@ -18,6 +18,7 @@ my %fhem_list = ();
 my @fhem_expected_list = ();
 my @fhem_history = ();
 my @timer_list = ();
+my %attributes = ();
 
 sub reset_mocks{
 	%readings = ();
@@ -25,6 +26,7 @@ sub reset_mocks{
 	@timer_list = ();
 	@fhem_expected_list = ();
 	@fhem_history = ();
+    %attributes = ();
 }
 
 
@@ -142,5 +144,23 @@ sub readingsBulkUpdate{
 	ok(defined $device);
 	add_reading($device, $reading, $value);
 }
-1;
+
+# Attributes ###############################################
+
+sub AttrVal {
+	my ($device,$name,$default) = @_;
+    my $val = $attributes{$device}{$name};
+    if (defined $val) {
+    	return $val;
+    }
+    return $default;
+}
+
+sub set_attr {
+    my ($device,$name,$value) = @_;
+    $attributes{$device}{$name} = $value;
+}
+
+
+1; #end module
 

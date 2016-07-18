@@ -22,6 +22,8 @@ use fhem_test_mocks;
 sub test_Shared {
     test_find_devices();
     test_send_to_all();
+    test_find_devices_in_room();
+    test_send_to_all_in_room();
     
     done_testing(); 
 }
@@ -66,3 +68,44 @@ vbc.wz.sued_fenster      VenetianBlindController
     VenetianBlinds::Shared::send_to_all("test");
     is(scalar( @{get_fhem_history()} ),4);
 }
+
+
+sub test_find_devices_in_room{
+    note( (caller(0))[3] ); 
+    main::reset_mocks();
+    main::set_fhem_mock("list .* type",
+        q{
+vbc.ku.fenster           VenetianBlindController
+vbc.sz.west_fenster      VenetianBlindController
+vbc.wz.sued_fenster      VenetianBlindController
+vbc.wz.west_fenster      VenetianBlindController
+        });
+
+    set_attr("vbc.ku.fenster","room","kitchen");
+    set_attr("vbc.sz.west_fenster","room","bathroom");
+    set_attr("vbc.wz.sued_fenster","room","kitchen,somethingelse");
+    set_attr("vbc.wz.west_fenster","room","daroom,kitchen,moreroom");
+    my @device_list = VenetianBlinds::Shared::find_devices_in_room("kitchen");
+    is(scalar @device_list,3, join(" ",@device_list));
+    ok("vbc.ku.fenster" ~~ @device_list);
+    ok("vbc.wz.sued_fenster" ~~ @device_list);
+    ok("vbc.wz.west_fenster" ~~ @device_list);
+}
+
+sub test_send_to_all_in_room {
+    note( (caller(0))[3] ); 
+    main::reset_mocks();
+    main::set_fhem_mock("list .* type",
+        q{
+vbc.ku.fenster           VenetianBlindController
+vbc.sz.west_fenster      VenetianBlindController
+        });
+
+    set_attr("vbc.ku.fenster","room","kitchen");
+    set_attr("vbc.sz.west_fenster","room","bathroom");
+    main::set_fhem_mock("set vbc.ku.fenster test");
+    VenetianBlinds::Shared::send_to_all_in_room("kitchen","test");
+	
+}
+
+1;

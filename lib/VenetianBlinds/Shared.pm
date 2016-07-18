@@ -19,6 +19,28 @@ sub send_to_all{
     }
 }
 
+sub send_to_all_in_room{
+    my ($cmd,$room) = @_;
+    foreach my $device (find_devices_in_room($room)) {
+        main::fhem("set $device $cmd");         
+    }
+}
+
+sub find_devices_in_room {
+    my ($my_room) = @_;
+    my @result = ();
+    foreach my $device (find_devices()){
+    	my $rooms = main::AttrVal($device,"room",undef);
+    	foreach my $room (split(/,/, $rooms)){
+    		if ($my_room eq $room){
+    			push(@result,$device);
+    		}
+    	}
+    }	
+    return @result;
+}
+
+
 sub find_devices{
     my $devstr = main::fhem("list .* type");
     my @result = ();
@@ -34,7 +56,6 @@ sub find_devices{
         }
     }
     return @result;
-    
 }
 
 
