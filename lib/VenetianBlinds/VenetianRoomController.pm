@@ -11,4 +11,11 @@ use v5.10.1;
 use strict;
 use warnings;
 
+sub Define{
+    my ($hash,$a,$h) = @_;
+    $hash->{master_controller} = $h->{master};
+
+}
+
+
 1;

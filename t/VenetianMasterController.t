@@ -25,11 +25,9 @@ sub test_VenetianMasterController {
 	test_update_calendar();
 	test_update_twilight();
 	test_update_weather();
-	test_find_devices();
 	test_wind_alarm();
 	test_stop_all();
     test_automatic_all();
-	test_send_to_all();
 	
 	done_testing();	
 }
@@ -110,26 +108,6 @@ sub test_update_weather{
 	is(ReadingsVal("JollyJumper", "cloud_index", undef) ,9);
 }
 
-sub test_find_devices{
-	note( (caller(0))[3] );	
-	main::reset_mocks();
-	main::set_fhem_mock("list .* type",
-		q{
-vbc.ku.fenster           VenetianBlindController
-vbc.sz.west_fenster      VenetianBlindController
-vbc.wz.sued_fenster      VenetianBlindController
-vbc.wz.sued_tuer         VenetianBlindController
-vbc.wz.west_fenster      VenetianBlindController
-		});
-	
-	my @device_list = VenetianBlinds::VenetianMasterController::find_devices();
-	is(scalar @device_list,5);
-	ok("vbc.ku.fenster" ~~ @device_list);
-	ok("vbc.sz.west_fenster" ~~ @device_list);
-	ok("vbc.wz.sued_fenster" ~~ @device_list);
-	
-}
-
 sub test_wind_alarm{
 	note( (caller(0))[3] );	
 	main::reset_mocks();
@@ -186,22 +164,6 @@ sub test_automatic_all{
     main::set_fhem_mock("set shady2 automatic");
     
     VenetianBlinds::VenetianMasterController::automatic_all($hash);
-}
-
-sub test_send_to_all {
-    note( (caller(0))[3] ); 
-    main::reset_mocks();
-    main::set_fhem_mock("list .* type",
-        q{
-vbc.ku.fenster           VenetianBlindController
-vbc.sz.west_fenster      VenetianBlindController
-vbc.wz.sued_fenster      VenetianBlindController
-        });
-    set_fhem_mock("set vbc.ku.fenster stop",undef);
-    set_fhem_mock("set vbc.sz.west_fenster stop",undef);
-    set_fhem_mock("set vbc.wz.sued_fenster stop",undef);
-    VenetianBlinds::VenetianMasterController::stop_all("test");
-    is(scalar( @{get_fhem_history()} ),4);
 }
 
 1;

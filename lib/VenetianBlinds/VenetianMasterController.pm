@@ -10,6 +10,7 @@ use v5.14;
 use strict;
 use warnings;
 use experimental "smartmatch";
+use VenetianBlinds::Shared;
 
 # Map the condition codes from yahoo to cloudiness index, 
 # makes it easier to implement thresholds as higher number indicates more clouds
@@ -142,7 +143,7 @@ sub check_wind_alarm{
 			if (($windspeed >= $hash->{wind_speed_threshold})){
 				main::Log(3,"Wind alarm: $windspeed km/h");
 				main::readingsSingleUpdate($hash,"wind_alarm",1,1);		
-				send_to_all("wind_alarm");			
+				VenetianBlinds::Shared::send_to_all("wind_alarm");			
 			} 
 		}
 
@@ -166,40 +167,14 @@ sub check_wind_alarm{
 
 sub automatic_all{
     my ($hash) = @_;
-    send_to_all("automatic");   
+    VenetianBlinds::Shared::send_to_all("automatic");   
 }
 
 sub stop_all{
 	my ($hash) = @_;
-	send_to_all("stop");
+	VenetianBlinds::Shared::send_to_all("stop");
 	
 }
-
-sub send_to_all{
-	my ($cmd) = @_;
-	foreach my $device (find_devices()) {
-		main::fhem("set $device $cmd");			
-	}
-}
-
-sub find_devices{
-	my $devstr = main::fhem("list .* type");
-	my @result = ();
-	foreach my $device (split /\n/, $devstr) {
-		$device =~ s/^\s+|\s+$//g; # trim white spaces
-		if( length($device) > 0){ 
-			$device =~ /^(\S+)\s+(\S+)$/;
-			my $devname = $1;
-			my $model = $2;
-			if ($model eq "VenetianBlindController"){
-				push(@result,$devname);
-			}
-		}
-	}
-	return @result;
-	
-}
-
 
 1;
 
