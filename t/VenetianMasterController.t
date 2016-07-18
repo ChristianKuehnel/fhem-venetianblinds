@@ -93,12 +93,12 @@ sub test_find_devices{
 	note( (caller(0))[3] );	
 	main::reset_mocks();
 	main::set_fhem_mock("list .* type",
-		"shady1   VenetianBlindController\nshady2    VenetianBlindController\nother Some different type of thing");
+		"my.dev_shady1   VenetianBlindController\nshady2.abc    VenetianBlindController\nother Some different type of thing");
 	
 	my @device_list = VenetianBlinds::VenetianMasterController::find_devices();
 	is(scalar @device_list,2);
-	ok("shady1" ~~ @device_list);
-	ok("shady2" ~~ @device_list);
+	ok("my.dev_shady1" ~~ @device_list);
+	ok("shady2.abc" ~~ @device_list);
 	
 }
 

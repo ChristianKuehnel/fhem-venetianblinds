@@ -181,7 +181,7 @@ sub find_devices{
 	my $devstr = main::fhem("list .* type");
 	my @result = ();
 	foreach my $device (split /\n/, $devstr) {
-		$device =~ /(\w+)\s+(.+)$/;
+		$device =~ /([\.\_\w]+)\s+(.+)$/;
 		my $devname = $1;
 		my $model = $2;
 		if ($model eq "VenetianBlindController"){
