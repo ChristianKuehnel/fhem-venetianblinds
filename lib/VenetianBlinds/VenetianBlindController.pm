@@ -135,7 +135,7 @@ sub update_automatic{
 	if ($force or !($new_scene eq $old_scene)) {
 		set_scene($hash,$new_scene,0);
 	} else {
-        main::Log(3,"Scene has not changed on $hash->{NAME}, not moving blinds");
+        main::Log(5,"Scene has not changed on $hash->{NAME}, not moving blinds");
     }
 }
 
