@@ -21,6 +21,7 @@ use fhem_test_mocks;
 
 ##############################################################################################
 sub test_VenetianMasterController {
+	test_define();
 	test_update_calendar();
 	test_update_twilight();
 	test_update_weather();
@@ -36,6 +37,24 @@ sub test_VenetianMasterController {
 test_VenetianMasterController();
 
 ##############################################################################################
+
+sub test_define{
+    note( (caller(0))[3] ); 
+    main::reset_mocks();
+	
+    my $hash = {};
+    my $a = {};
+    my $h = {
+    "twilight" => "TWILIGHT",
+    "weather" => "WEATHER",
+    "wind_speed_threshold" => 50,
+    };
+	VenetianBlinds::VenetianMasterController::Define($hash,$a,$h);
+	
+	is($hash->{twilight},"TWILIGHT");
+    is($hash->{weather},"WEATHER");
+    is($hash->{wind_speed_threshold},50);	
+}
 
 sub test_update_calendar{
 	note( (caller(0))[3] );	
@@ -118,6 +137,7 @@ sub test_wind_alarm{
 		"shady1   VenetianBlindController");
 	my $hash = {
 		"NAME" => "NervousNick",
+		"wind_speed_threshold" => 50,
 	};
 	add_reading("NervousNick", "wind_speed", 10 );
 	add_reading("NervousNick", "wind_alarm", 0 );

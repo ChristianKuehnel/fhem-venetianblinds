@@ -30,14 +30,11 @@ my $yahoo_code_map = {
     39 => 5, #scattered thunderstorms
 };
 
-my $wind_speed_threshold = 50;
-
-
 sub Define{
 	my ($hash,$a,$h) = @_;
 	$hash->{twilight} = $h->{twilight};
 	$hash->{weather} = $h->{weather};
-
+    $hash->{wind_speed_threshold} = $h->{wind_speed_threshold};
 	return;
 }
 
@@ -142,7 +139,7 @@ sub check_wind_alarm{
 	my $windalarm = main::ReadingsVal($hash->{NAME}, "wind_alarm", undef);
 	given ($windalarm) {
 		when (0) {
-			if (($windspeed >= $wind_speed_threshold)){
+			if (($windspeed >= $hash->{wind_speed_threshold})){
 				main::Log(3,"Wind alarm: $windspeed km/h");
 				main::readingsSingleUpdate($hash,"wind_alarm",1,1);		
 				send_to_all("wind_alarm");			
@@ -150,7 +147,7 @@ sub check_wind_alarm{
 		}
 
 		when (1) {
-			if (($windspeed >= $wind_speed_threshold)){
+			if (($windspeed >= $hash->{wind_speed_threshold})){
 				main::readingsSingleUpdate($hash,"wind_alarm",1,1);		
 			} else {
 				if (main::ReadingsAge($hash->{NAME},"wind_speed",undef) > 600) {
