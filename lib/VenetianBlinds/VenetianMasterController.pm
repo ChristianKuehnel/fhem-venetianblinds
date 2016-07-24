@@ -44,13 +44,13 @@ sub Set{
 	my ($hash,$a,$h) = @_;
 	my $cmd = $a->[1];
 	if ($cmd eq "?"){
-		return "trigger_update:noArg stop_all:noArg";
+		return "trigger_update:noArg stop:noArg automatic:noArg";
 	} elsif ($cmd eq "trigger_update") {
 		trigger_update($hash);
-	} elsif ($cmd eq "stop_all") {
-		stop_all($hash);
-    } elsif ($cmd eq "automatic_all") {
-        automatic_all($hash);
+	} elsif ($cmd eq "stop") {
+    VenetianBlinds::Shared::send_to_all("stop");   
+    } elsif ($cmd eq "automatic") {
+    VenetianBlinds::Shared::send_to_all("automatic");   
 	} else {
 		return "unknown command $cmd";
 	}
@@ -167,17 +167,6 @@ sub check_wind_alarm{
 	return;
 }
 
-
-sub automatic_all{
-    my ($hash) = @_;
-    VenetianBlinds::Shared::send_to_all("automatic");   
-}
-
-sub stop_all{
-	my ($hash) = @_;
-	VenetianBlinds::Shared::send_to_all("stop");
-	
-}
 
 1;
 

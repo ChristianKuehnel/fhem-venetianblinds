@@ -21,6 +21,7 @@ use fhem_test_mocks;
 
 ##############################################################################################
 sub test_VenetianMasterController {
+    test_Set_questionsmark();
 	test_define();
 	test_update_calendar();
 	test_update_twilight();
@@ -35,6 +36,22 @@ sub test_VenetianMasterController {
 test_VenetianMasterController();
 
 ##############################################################################################
+
+
+sub test_Set_questionsmark{
+    note( "test case: ".(caller(0))[3] );   
+    main::reset_mocks();
+    my $hash = {}; 
+    my $a = ["irgendwas","?"];
+    my $h = {};
+
+    my $answer = VenetianBlinds::VenetianMasterController::Set($hash,$a,$h);
+
+    ok(defined $answer,$answer);
+    ok($answer =~ /automatic:noArg/);
+    ok($answer =~ /stop:noArg/);
+        
+}
 
 sub test_define{
     note( (caller(0))[3] ); 
@@ -149,7 +166,8 @@ sub test_stop_all{
 	main::set_fhem_mock("set shady1 stop");
 	main::set_fhem_mock("set shady2 stop");
 	
-	VenetianBlinds::VenetianMasterController::stop_all($hash);
+	VenetianBlinds::VenetianMasterController::Set($hash,["stopper","stop"]);
+    is(scalar @{get_fhem_history()},3,join(", ",@{get_fhem_history()}));        
 }
 
 sub test_automatic_all{
@@ -163,7 +181,8 @@ sub test_automatic_all{
     main::set_fhem_mock("set shady1 automatic");
     main::set_fhem_mock("set shady2 automatic");
     
-    VenetianBlinds::VenetianMasterController::automatic_all($hash);
+    VenetianBlinds::VenetianMasterController::Set($hash,["stopper","automatic"]);
+    is(scalar @{get_fhem_history()},3,join(", ",@{get_fhem_history()}));        
 }
 
 1;
