@@ -130,14 +130,21 @@ sub set_scene{
 		main::Log(1, "undefined scene &scenes->{$scene}");
 	} else {
 		main::readingsSingleUpdate($hash,"scene",$scene,1);		
-        if ($automatic) {
-            $hash->{STATE} = "automatic: $scene";
-        } else {
-            $hash->{STATE} = "manual: $scene";
-        }
         main::Log(3,"moving blinds $hash->{device} to scene $scene.");
         move_blinds($hash, &scenes->{$scene}{blind}, &scenes->{$scene}{slat});	
 	}
+	update_STATE($hash);
+}
+
+sub update_STATE {
+    my ($hash) = @_;
+    my $automatic = main::ReadingsVal($hash->{NAME}, "automatic", undef);
+    my $scene = main::ReadingsVal($hash->{NAME}, "scene", undef);
+    if ($automatic) {
+        $hash->{STATE} = "automatic: $scene";
+    } else {
+        $hash->{STATE} = "manual: $scene";
+    }
 }
 
 sub move_blinds{
