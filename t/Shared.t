@@ -23,8 +23,7 @@ sub test_Shared {
     test_find_devices();
     test_send_to_all();
     test_find_devices_in_room();
-    test_send_to_all_in_room();
-    
+        
     done_testing(); 
 }
 
@@ -89,20 +88,6 @@ sub test_find_devices_in_room{
     ok("dev5" ~~ @device_list);
 }
 
-sub test_send_to_all_in_room {
-    note( (caller(0))[3] ); 
-    main::reset_mocks();
-    main::set_fhem_mock("list .* type",
-        q{
-vbc.ku.fenster           VenetianBlindController
-vbc.sz.west_fenster      VenetianBlindController
-        });
 
-    set_attr("vbc.ku.fenster","room","kitchen");
-    set_attr("vbc.sz.west_fenster","room","bathroom");
-    main::set_fhem_mock("set vbc.ku.fenster test");
-    VenetianBlinds::Shared::send_to_all_in_room("kitchen","test");
-	
-}
 
 1;

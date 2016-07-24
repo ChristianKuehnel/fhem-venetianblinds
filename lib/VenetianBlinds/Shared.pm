@@ -44,33 +44,20 @@ sub send_to_all{
     }
 }
 
-sub send_to_all_in_my_rooms{
-    my ($hash, $cmd) = @_;
-    my $rooms = main::AttrVal($hash->{NAME},"room",undef);
-    foreach my $room ( split(/,/,$rooms)){
-	    foreach my $device (find_devices_in_room($room)) {
-	        main::fhem("set $device $cmd");         
-	    }
-    }
-}
-
-sub send_to_all_in_room{
-    my ($cmd,$room) = @_;
-    foreach my $device (find_devices_in_room($room)) {
-        main::fhem("set $device $cmd");         
-    }
-}
-
 sub find_devices_in_room {
     my ($my_room) = @_;
     my @result = ();
     my @devices = find_devices();
     foreach my $device (@devices){
     	my $rooms = main::AttrVal($device,"room",undef);
-    	foreach my $room (split(/,/, $rooms)){
-    		if ($my_room eq $room){
-    			push(@result,$device);
-    		}
+    	if (defined $rooms){
+	        foreach my $room (split(/,/, $rooms)){
+	            if ($my_room eq $room){
+	                push(@result,$device);
+	            }
+	        }
+    	} else {
+    		main::Log(3,"Blinds '$device' not mapped to a room");
     	}
     }	
     return @result;
