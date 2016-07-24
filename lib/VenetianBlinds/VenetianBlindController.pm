@@ -16,6 +16,7 @@ use VenetianBlinds::Shared "scenes";
 # constants ########################
 
 use constant blind_threshold =>  5; #percentage points
+use constant slat_threshold  =>  5; #percentage points
 use constant power_threshold => 10; #watts
 
 # FHEM commands ########################
@@ -148,8 +149,9 @@ sub move_blinds{
 		count_commands($hash);
 	}
 	if ( defined $slat and 
+	    abs($slat - $current_slat) > &slat_threshold and
 		$blind < 95 ){
-		enqueue_command($hash,"set $hash->{device} positionSlat $slat");
+		main::fhem("set $hash->{device} positionSlat $slat");
 	}
 }
 
@@ -169,26 +171,6 @@ sub count_commands{
 	my ($hash) = @_;
     my $count = main::ReadingsVal($hash->{NAME}, "command_count", 0) +1;
 	main::readingsSingleUpdate($hash,"command_count",$count,0);		
-}
-
-# queing of commans ######################
-sub enqueue_command {
-	my ($hash,$cmd) = @_;
-	$hash->{queue} = $cmd;
-        main::InternalTimer(main::gettimeofday()+1, "VenetianBlinds::VenetianBlindController::process_queue", $hash, 1);        
-}
-
-sub process_queue {
-	my ($hash) = @_;
-	if (!defined $hash->{queue}) { return; };
-		
-	if (get_power($hash) > &power_threshold) {
-		main::InternalTimer(main::gettimeofday()+1, "VenetianBlinds::VenetianBlindController::process_queue", $hash, 1);        
-	} else {
-		main::fhem($hash->{queue});
-		delete $hash->{queue};
-		count_commands($hash);
-	}
 }
 
 

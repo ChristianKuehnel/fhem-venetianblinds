@@ -114,26 +114,11 @@ sub test_move_both {
 	set_fhem_mock("get shadow position","Blind 0 Slat 30");
 	add_reading("shadow","position","Blind 0 Slat 30");
 	set_fhem_mock("set shadow positionBlinds 50",undef);
-    set_fhem_mock("get shadow smStatus",undef);
     add_reading("shadow","power","power:90.0 W");
+    set_fhem_mock("set shadow positionSlat 50",undef);
 	add_reading("mover","command_count","0");
 	VenetianBlinds::VenetianBlindController::move_blinds($hash,50,50);	
-	ok(defined $hash->{queue});
-	is(scalar @{get_fhem_history()},2);
-
-	reset_fhem_history();	
-    add_reading("shadow","power","90 W");
-	trigger_timer();
-	ok(defined $hash->{queue});
-	is(scalar @{get_fhem_history()},1);
-	
-	reset_fhem_history();	
-    add_reading("shadow","power","0 W");
-	set_fhem_mock("set shadow positionSlat 50",undef);
-	trigger_timer();
-	ok(!defined $hash->{queue});	
-	is(main::ReadingsVal("mover","command_count",undef),2);
-	is(scalar @{get_fhem_history()},2);
+    is(scalar @{get_fhem_history()},3,join(", ",@{get_fhem_history()}));        
 }
 
 sub test_wind_alarm_vbc {
