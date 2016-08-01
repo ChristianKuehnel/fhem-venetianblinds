@@ -210,7 +210,6 @@ sub get_position{
     my $device=$hash->{device};
     #TODO: do we really need a ReadingsVal or does the "get position" also deliver that result?
     my $position = main::ReadingsVal($device, "position", undef);
-    $hash->{position} = $position;
     $position =~ /Blind (\d+) Slat (\d+)/;
     if (!defined $1 or !defined $2){
         main::Log( 1, "Error: could not get position of device $hash->{device}: $position");

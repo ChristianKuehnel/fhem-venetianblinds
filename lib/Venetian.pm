@@ -67,7 +67,7 @@ sub Venetian_Notify {
 	return "" if(IsDisabled($ownName)); # Return without any further action if the module is disabled
 	
     my $devName = $dev_hash->{NAME}; # Device that created the events
-    my $events = main::deviceEvents($dev_hash,0);
+    my $events = main::deviceEvents($dev_hash,1);
     return if( !$events );
     
 	return vbc_call("Notify",$own_hash, $devName, $events);
