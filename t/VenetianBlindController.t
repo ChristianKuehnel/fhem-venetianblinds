@@ -30,6 +30,7 @@ sub test_VenetianBlindController {
 	test_update_automatic_off();
 	test_update_automatic_down();
 	test_stop();
+	test_define_errors();
 	
 	done_testing();
 }
@@ -48,14 +49,17 @@ sub test_Define {
 		"elevation" => "10-90",
 		"azimuth" => "80-190",
 		"months" => "5-10",
+		"could_index_threshold" => "5",
 	};
-	VenetianBlinds::VenetianBlindController::Define($hash,$a,$h);
+	my $answer = VenetianBlinds::VenetianBlindController::Define($hash,$a,$h);
+	is($answer, undef);
 	is($hash->{master_controller},"mymaster");
 	is($hash->{device},"mydevice");
 	is($hash->{azimuth_start},80);
 	is($hash->{azimuth_end},190);
 	is($hash->{elevation_start},10);
 	is($hash->{elevation_end},90);
+	is($hash->{could_index_threshold},5);
 }
 
 sub test_Set_questionsmark {
@@ -332,6 +336,42 @@ sub test_stop {
 	ok(!defined $hash->{queue});
 	is(main::ReadingsVal("its_me","command_count",undef),1);
 	
+}
+
+sub test_define_errors {
+	note( "test stop: ".(caller(0))[3] );	
+	main::reset_mocks();
+    main::reset_mocks();
+	my $hash = {}; 
+	my $a = [];
+	my $h = {};
+	
+	my $answer = VenetianBlinds::VenetianBlindController::Define($hash,$a,$h);
+	is($answer,"Mandatory argument 'master=<name>' is missing or undefined");
+	
+	$h->{master} = "mymaster";
+	$answer = VenetianBlinds::VenetianBlindController::Define($hash,$a,$h);
+	is($answer,"Mandatory argument 'device=<name>' is missing or undefined");
+
+	$h->{device} = "some_device";
+	$answer = VenetianBlinds::VenetianBlindController::Define($hash,$a,$h);
+	is($answer,"Mandatory argument 'could_index_threshold=<value>' is missing or undefined");
+
+	$h->{could_index_threshold} = "6";
+	$answer = VenetianBlinds::VenetianBlindController::Define($hash,$a,$h);
+	is($answer,"Mandatory argument 'azimuth=<start>-<end>' is missing or undefined");
+
+	$h->{azimuth} = "0-90";
+	$answer = VenetianBlinds::VenetianBlindController::Define($hash,$a,$h);
+	is($answer,"Mandatory argument 'elevation=<start>-<end>' is missing or undefined");
+
+	$h->{elevation} = "6-13";
+	$answer = VenetianBlinds::VenetianBlindController::Define($hash,$a,$h);
+	is($answer,"Mandatory argument 'months=<start>-<end>' is missing or undefined");
+
+	$h->{months} = "5-10";
+	$answer = VenetianBlinds::VenetianBlindController::Define($hash,$a,$h);
+	is($answer,undef);
 }
 
 1;

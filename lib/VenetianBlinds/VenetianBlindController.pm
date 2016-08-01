@@ -22,19 +22,41 @@ use constant power_threshold => 10; #watts
 # FHEM commands ########################
 
 sub Define{
+	#TODO: check if $device and $master really exist
 	my ($hash,$a,$h) = @_;
+
+	if (!defined $h->{master}) {
+		return "Mandatory argument 'master=<name>' is missing or undefined";
+	}
 	$hash->{master_controller} = $h->{master};
+
+	if (!defined $h->{device}) {
+		return "Mandatory argument 'device=<name>' is missing or undefined";
+	}
 	$hash->{device} = $h->{device};
+	
+	if (!defined $h->{could_index_threshold}) {
+		return "Mandatory argument 'could_index_threshold=<value>' is missing or undefined";
+	}	
 	$hash->{could_index_threshold} = $h->{could_index_threshold};
 
+	if (!defined $h->{azimuth} ) {
+		return "Mandatory argument 'azimuth=<start>-<end>' is missing or undefined";
+	}	
 	my ($azstart,$azend) = split(/-/, $h->{azimuth});
 	$hash->{azimuth_start} = $azstart;
 	$hash->{azimuth_end} = $azend;
 
+	if (!defined $h->{elevation}) {
+		return "Mandatory argument 'elevation=<start>-<end>' is missing or undefined";
+	}
 	my ($evstart,$evend) = split(/-/, $h->{elevation});
 	$hash->{elevation_start} = $evstart;
 	$hash->{elevation_end} = $evend;
 
+	if (!defined $h->{months} ) {
+		return "Mandatory argument 'months=<start>-<end>' is missing or undefined";
+	}	$hash->{azimuth_start} = $azstart;
 	my ($monstart,$monend) = split(/-/, $h->{months});
 	$hash->{month_start} = $monstart;
 	$hash->{month_end} = $monend;
