@@ -29,6 +29,7 @@ sub test_VenetianMasterController {
 	test_wind_alarm();
 	test_stop_all();
     test_automatic_all();
+	test_define_errors();
 	
 	done_testing();	
 }
@@ -64,11 +65,36 @@ sub test_define{
     "weather" => "WEATHER",
     "wind_speed_threshold" => 50,
     };
-	VenetianBlinds::VenetianMasterController::Define($hash,$a,$h);
+	my $answer = VenetianBlinds::VenetianMasterController::Define($hash,$a,$h);
 	
+	is($answer,undef);
 	is($hash->{twilight},"TWILIGHT");
     is($hash->{weather},"WEATHER");
     is($hash->{wind_speed_threshold},50);	
+}
+
+sub test_define_errors{
+    note( (caller(0))[3] ); 
+    main::reset_mocks();
+	
+    my $hash = {};
+    my $a = {};
+    my $h = {};
+	
+	my $answer = VenetianBlinds::VenetianMasterController::Define($hash,$a,$h);
+	is($answer,"Mandatory argument 'twilight=<name>' is missing or undefined");
+	
+	$h->{twilight} = "some_name";
+	$answer = VenetianBlinds::VenetianMasterController::Define($hash,$a,$h);
+	is($answer,"Mandatory argument 'weather=<name>' is missing or undefined");
+	
+	$h->{weather} = "some_name";
+	$answer = VenetianBlinds::VenetianMasterController::Define($hash,$a,$h);
+	is($answer,"Mandatory argument 'wind_speed_threshold=<value>' is missing or undefined");
+	
+	$h->{wind_speed_threshold} = "60";
+	$answer = VenetianBlinds::VenetianMasterController::Define($hash,$a,$h);
+	is($answer,undef);
 }
 
 sub test_update_calendar{

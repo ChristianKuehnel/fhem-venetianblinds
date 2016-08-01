@@ -33,10 +33,23 @@ my $yahoo_code_map = {
 
 sub Define{
 	my ($hash,$a,$h) = @_;
+
+	if (!defined $h->{twilight}) {
+		return "Mandatory argument 'twilight=<name>' is missing or undefined";
+	}	
 	$hash->{twilight} = $h->{twilight};
+
+	if (!defined $h->{weather}) {
+		return "Mandatory argument 'weather=<name>' is missing or undefined";
+	}	
 	$hash->{weather} = $h->{weather};
+
+	if (!defined $h->{wind_speed_threshold}) {
+		return "Mandatory argument 'wind_speed_threshold=<value>' is missing or undefined";
+	}	
     $hash->{wind_speed_threshold} = $h->{wind_speed_threshold};
-    $hash->{STATE} = "defined";
+
+    $hash->{STATE} = "OK";
 	return;
 }
 
