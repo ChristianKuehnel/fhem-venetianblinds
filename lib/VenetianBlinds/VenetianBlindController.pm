@@ -75,6 +75,8 @@ sub Notify{
 	my ($hash, $devName, $events) = @_;	
     if ($devName eq $hash->{master_controller}){
 		update_automatic($hash,0);
+	} elsif ($devName eq $hash->{device}) {
+		update_STATE($hash);
 	}
 	return;
 }
@@ -92,12 +94,15 @@ sub update_automatic{
 	my $month = main::ReadingsVal($master, "month", undef);
 	my $automatic = main::ReadingsVal($hash->{NAME}, "automatic", undef);
 	my $old_scene = main::ReadingsVal($hash->{NAME}, "scene", undef);
+	my $mechanical_switches = main::ReadingsVal($hash->{device}, "reportedState", undef);
 	
 	# reasons to not work in automatic mode
 	if ($wind_alarm  
 		or !$automatic
 		or $month < $hash->{month_start} 
-		or $month > $hash->{month_end} 	){ 
+		or $month > $hash->{month_end} 	
+		or $mechanical_switches eq "setOn"
+		or $mechanical_switches eq "setOff" ){ 
 			return;
         main::Log(3,"Automatic inactive on $hash->{NAME}"); 
 	}
@@ -140,7 +145,13 @@ sub update_STATE {
     my ($hash) = @_;
     my $automatic = main::ReadingsVal($hash->{NAME}, "automatic", undef);
     my $scene = main::ReadingsVal($hash->{NAME}, "scene", undef);
-    if ($automatic) {
+	my $mechanical_switches = main::ReadingsVal($hash->{device}, "reportedState", undef);
+
+	if ($mechanical_switches eq "setOn") {
+        $hash->{STATE} = "mechanical: Up";				
+	} elsif ( $mechanical_switches eq "setOff") {
+        $hash->{STATE} = "mechanical: Down";						
+	} elsif ($automatic) {
         $hash->{STATE} = "automatic: $scene";
     } else {
         $hash->{STATE} = "manual: $scene";
