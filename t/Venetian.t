@@ -19,6 +19,8 @@ use_ok("Venetian");
 ##############################################################################################
 sub test_venetian2(){
 	test_Set();
+	test_Define_valid();
+	test_Define_invalid_type();
 	
 	done_testing();
 }
@@ -34,6 +36,24 @@ sub test_Set() {
 	my $h = {};
 	my $answer = Venetian_Set($hash,$a,$h);
 	ok($answer =~ /automatic:noArg/);	
+}
+
+sub test_Define_valid {
+	my $hash = {}; 
+	my $a = [];
+	my $h = {"type"=>"room"};
+
+	my $answer = Venetian_Define($hash,$a,$h);
+	is($answer,undef);
+}
+
+sub test_Define_invalid_type {
+	my $hash = {}; 
+	my $a = [];
+	my $h = {"type"=>"xxx"};
+
+	my $answer = Venetian_Define($hash,$a,$h);
+	is($answer,"Type xxx is not supported!");
 }
 
 1;

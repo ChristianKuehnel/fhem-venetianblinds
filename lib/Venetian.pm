@@ -48,9 +48,8 @@ sub Venetian_Define {
     my ($hash, $a, $h) = @_;	
 	$hash->{type} = $valid_types{$h->{type}};
 	if (!defined $hash->{type}) {
-		return "Type $hash->{type} is not supported!";
+		return "Type $h->{type} is not supported!";
 	}
-
 	return vbc_call("Define",$hash, $a, $h);
 }
 
