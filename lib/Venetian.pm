@@ -84,8 +84,101 @@ sub vbc_call{
 	}
 	return $result;	
 }
-
-=head1 NAME
-some package doc
-=cut
 1;
+
+=pod
+=begin html
+
+<a name="Venetian"></a>
+<h3>Venetian</h3>
+<ul>
+	<i>Venetian</i> implements a fully automated solution to control venetian blinds. 
+	It will consinder lots of input data to set the blinds as a human being would do.
+	It use the sun position (from Twilight) the weather (from Weather) and orientation of the blinds.
+	The blinds are opened automatically if the wind speed exceeds a user defined threshold.
+	<br/><br/>
+	<b>Note:</b> Venetian only works with Fibaro FGM-222 controllers!
+	<br/><br/>
+	A minimal set up consists of two devices: one <i>Master</i> and one <i>Blind</i>. 
+	The <i>Master</i> will collect global data from your installation while the <i>Blind</i> will control the actual device.
+	For each physical device a <i>Blind</i> device must be defined.
+	<br/><br/>
+	You can add an optional device <i>Room</i> to control all <i>Blinds</i> in one room with one click.
+	For this to work your <i>Blinds</i> must be mapped to rooms with the standard attribute "room".
+	<br/><br/>
+	<a name="Venetian_Define"></a>
+	<b>Define</b>
+	<ul>
+		Master:<br/> 
+		<code>define  &lt;name&gt; Venetian type=master twilight=&lt;name&gt; weather=&lt;name&gt; wind_speed_threshold=&lt;value&gt;</code>
+		<br/><br/>
+		
+		Room: <br/>
+		<code>define  &lt;name&gt; Venetian type=room	&#91;rooms=&lt;name&gt;,&lt;name&gt;,...	&#93;</code> 
+		<br/><br/>
+		
+		Blind: <br/>
+		<code>define  &lt;name&gt; Venetian type=blind master=&lt;name&gt; device=&lt;name&gt; could_index_threshold=&lt;number&gt; azimuth=&lt;start&gt;-&lt;end&gt; elevation=&lt;start&gt;-&lt;end&gt; months=&lt;start&gt;-&lt;end&gt;</code>
+		<br/><br/>
+		
+		<b>Parameters (common)</b>
+		<ul>
+			<li/>type<br/>
+				is one of the values "master", "room" or "blind".
+		</ul>
+		<b>Parameters (Master)</b>
+		<ul>
+			<li/>twilight<br/>
+				Name of the <a href="#Twilight">Twilight</a> device. 
+				This is used to get the current position of the sun.
+			<li/>weather<br/>
+				Name of the <a href="#Weather">Weather</a> device.
+				This is used to get the weather reports
+			<li/>wind_speed_threshold<br/>
+				Maximum wind speed in km/h the venetian blinds are designed for.
+				If the measured wind speed exceed this threshold, the blinds are opened automatically to prevent damages.
+		</ul>
+		<b>Parameters (Blind)</b>
+		<ul>
+			<li/>master</br>
+				name of the Venetian "Master" device.
+			<li/>device</br>
+				name of the blind controller (Fibaro FGM-222) to be controlled.
+			<li/>could_index_threshold</br>
+				Threshold for the cloudiness, as defined in <a href="https://de.wikipedia.org/wiki/Bew%C3%B6lkung">Wikipedia</a>.
+				The scale is 0 (clear sky) to 8 (overcast), where 9 is unknown.
+				The blinds are lowered only the the current cloud index is <i>below</i> this number.
+				<br/>
+				Example: <code>could_index_threshold=5</code> means broken 
+			<li/>azimuth</br>
+				The range of the azimuth of the sun, in which the blinds shall be closed.
+				This is measured in degrees.
+				This is defined by the pyhiscal orientation of your window.
+				You can use a compass to measure this for every window.
+				<br/>
+				Example: <code>azimuth=90-120</code> means from 90° to 120° 
+			<li/>elevation</br>
+				The range of the elevation of the sun, in which the blinds shall be closed.
+				This is measured in degrees.
+				You can guess this from the pyhsical localtion of your window and obstacles around your building.
+				<br/>
+				Example: <code>azimuth=10-90</code> means from 10° to 90°
+			<li/>months</br>
+				The range of months in which the blinds shall be closed, e.g. summer.
+				<br/>
+				Example: <code>azimuth=5-10</code> means from May to October
+		</ul>
+		<b>Parameters (Room)</b>
+		<ul>
+			<li/>rooms (optional)</br>
+				Comma separated list of rooms in which this device shall control the blinds.
+				If this is not defined, the rooms from the Attribute of this device are used. 
+				<br/>
+				Example: <code>rooms=Kitchen,Living</code> means that all blinds in the rooms named "Kitchen" and "Living" are controlled.
+		</ul>
+	</ul>
+</ul>
+
+=end html
+=cut
+

@@ -4,7 +4,7 @@ t/manifest.t
 t/00-load.t
 t/VenetianBlindController.t
 t/VenetianMasterController.t
-t/pod.t
+t/VenetianRoomController.t
 t/fhem_test_mocks.pm
 t/perl_critic.t
 README.md
