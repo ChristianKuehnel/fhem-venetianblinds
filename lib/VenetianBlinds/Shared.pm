@@ -17,7 +17,7 @@ use base 'Exporter';
 use constant scenes => {
     "open" => {
         "blind" => 99,
-        "slat" => undef,   
+        "slat" => 99,   
     },
     "closed" => {
         "blind" => 0,
