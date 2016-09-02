@@ -135,17 +135,37 @@ sub update_automatic{
 		$hash->{azimuth_start} <= $sun_azimuth and
 		$sun_azimuth <= $hash->{azimuth_end} and
 		$cloud_index <= $hash->{could_index_threshold}) {
-		$new_scene ="shaded";
+        $new_scene ="shaded";
+		#$new_scene ="adaptive";
 	} else {
 		$new_scene = "open";
 	}
 	
-	if ($force or !($new_scene eq $old_scene)) {
+	if ($force or !($new_scene eq $old_scene) or ($new_scene eq "adaptive") ) {
 		set_scene($hash,$new_scene,0);
 	} else {
         main::Log(5,"Scene has not changed on $hash->{NAME}, not moving blinds");
     }
 }
+
+# smart slat control #######################
+#
+# This equation converts the elevation of the sun to the angle of the slats.
+# It's an approximation of the trigonometric functions for my slat geometry.
+# TODO: to implement this properly, we need to make the slat geometry configurable
+
+sub get_slats_for_elevation{
+    my ($hash) = @_;
+    my $master = $hash->{master_controller};
+    my $elevation = main::ReadingsVal($master, "sun_elevation", undef);
+    if ($elevation >= 45) {
+        return 50;
+    } elsif ($elevation <= 10) {
+    	return 0;
+    }
+    return $elevation*1.16 + 4;
+}
+
 
 # move the blinds ##########################
 sub set_scene{
@@ -183,6 +203,9 @@ sub update_STATE {
 sub move_blinds{
 	my ($hash, $blind, $slat)= @_;
 	my ($current_blind, $current_slat) = get_position($hash);
+	if (defined $slat and $slat eq "adaptive") {
+	    $slat = get_slats_for_elevation($hash);
+	}
 	if ( defined $blind and
 		abs($blind-$current_blind) > &blind_threshold ){
 		main::fhem("set $hash->{device} positionBlinds $blind");

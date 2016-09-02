@@ -31,6 +31,8 @@ sub test_VenetianBlindController {
 	test_update_automatic_down();
 	test_stop();
 	test_define_errors();
+	test_get_slats_for_elevation();
+	test_set_scene_adaptive();
 	
 	done_testing();
 }
@@ -373,6 +375,53 @@ sub test_define_errors {
 	$h->{months} = "5-10";
 	$answer = VenetianBlinds::VenetianBlindController::Define($hash,$a,$h);
 	is($answer,undef);
+}
+
+sub test_get_slats_for_elevation {
+    note( "test case: ".(caller(0))[3] );   
+    main::reset_mocks();
+    my $master = "sir";
+    my $hash = {
+    	"master_controller" => "$master",
+    }; 
+
+    add_reading($master, "sun_elevation", 46);
+    my $slats = VenetianBlinds::VenetianBlindController::get_slats_for_elevation($hash);
+    is($slats,50);
+	
+    add_reading($master, "sun_elevation", 30);
+    $slats = VenetianBlinds::VenetianBlindController::get_slats_for_elevation($hash);
+    ok($slats > 35 and $slats <40);
+
+
+    add_reading($master, "sun_elevation", 9);
+    $slats = VenetianBlinds::VenetianBlindController::get_slats_for_elevation($hash);
+    is($slats,0);
+}
+
+sub test_set_scene_adaptive {
+    note( "test case: ".(caller(0))[3] );   
+    main::reset_mocks();
+    my $master = "the_master";
+    my $hash = {
+        "device" => "shadow",
+        "NAME" => "my_name",
+        "master_controller" => $master,
+    };
+    add_reading("shadow","position","Blind 99 Slat 99");
+    add_reading("shadow","power","0 W");
+    add_reading("shadow","reportedState","swmEnd");
+    add_reading($hash->{NAME},"scene","open");
+    add_reading($hash->{NAME},"automatic",1);
+    add_reading($master, "sun_elevation", 50);
+    
+    set_fhem_mock("get shadow position","Blind 99 Slat 99");
+    set_fhem_mock("set shadow positionBlinds 0");
+    set_fhem_mock("set shadow positionSlat 50");
+
+    VenetianBlinds::VenetianBlindController::set_scene($hash,"adaptive");
+
+    is(scalar @{get_fhem_history()},3,join(", ",@{get_fhem_history()}));        
 }
 
 1;

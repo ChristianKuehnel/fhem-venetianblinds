@@ -31,6 +31,10 @@ use constant scenes => {
         "blind" => 0,
         "slat" => 30,   
     },
+    "adaptive" => {
+        "blind" => 0,
+        "slat" => "adaptive",   
+    },    
 };
 
 our @EXPORT_OK = ('scenes');
