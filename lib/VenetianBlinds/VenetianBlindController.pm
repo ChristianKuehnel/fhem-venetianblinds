@@ -189,8 +189,7 @@ sub move_blinds{
 		count_commands($hash);
 	}
 	if ( defined $slat and 
-	    abs($slat - $current_slat) > &slat_threshold and
-		$blind < 95 ){
+	    abs($slat - $current_slat) > &slat_threshold ){
 		main::fhem("set $hash->{device} positionSlat $slat");
 	}
 }

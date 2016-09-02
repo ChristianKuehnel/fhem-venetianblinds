@@ -155,10 +155,11 @@ sub test_set_scene {
 	
 	set_fhem_mock("get shadow position","Blind 0 Slat 30");
 	set_fhem_mock("set shadow positionBlinds 99");
+	set_fhem_mock("set shadow positionSlat 99");
 
 	VenetianBlinds::VenetianBlindController::set_scene($hash,"open");
 
-	is(scalar @{get_fhem_history()},2,join(", ",@{get_fhem_history()}));		
+	is(scalar @{get_fhem_history()},3,join(", ",@{get_fhem_history()}));		
 	is(main::ReadingsVal("my_name","command_count",undef),1);
 }
 
