@@ -233,7 +233,7 @@ sub test_update_automatic_down {
 	my $hash = setup_automatic();
 	
   	VenetianBlinds::VenetianBlindController::update_automatic($hash,0);
-  	is($newScene,"shaded");          
+  	is($newScene,"adaptive");          
 
 	$newScene = undef;
 	$hash = setup_automatic();
@@ -285,13 +285,13 @@ sub test_update_automatic_down {
 	$newScene = undef;
 	$hash = setup_automatic();
 	VenetianBlinds::VenetianBlindController::update_automatic($hash,0);
-  	is($newScene,"shaded");          
+  	is($newScene,"adaptive");          
 
 	#repeast same command -> do not move anything
 	$newScene = undef;
 	VenetianBlinds::VenetianBlindController::update_automatic($hash,0);
-  	is(ReadingsVal($hash->{NAME},"scene",undef),"shaded");          
-  	is($newScene,undef);          
+  	is(ReadingsVal($hash->{NAME},"scene",undef),"adaptive");          
+  	is($newScene,"adaptive");          
 
 	$newScene = undef;
 	$hash = setup_automatic();
@@ -322,7 +322,7 @@ sub test_update_automatic_down {
 	$newScene = undef;
 	$hash = setup_automatic();
 	VenetianBlinds::VenetianBlindController::update_automatic($hash,0);
-  	is($newScene,"shaded");          
+  	is($newScene,"adaptive");          
 }
 
 sub test_stop {
