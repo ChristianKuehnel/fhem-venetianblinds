@@ -149,9 +149,29 @@ sub update_automatic{
 
 # smart slat control #######################
 #
-# This equation converts the elevation of the sun to the angle of the slats.
+# This equation converts the elevation of the sun to the angle of the slats. 
 # It's an approximation of the trigonometric functions for my slat geometry.
+#
+# The goal of the "adaptive" mode is to set the angle of the slats just closed 
+# enough that the sun can't get in. So if the sun elevation is very high 
+# (e.g. 60°) the slats should be vertical so that the sun can't get in, but you 
+# can still look out. If the elevation of the sun is very low (e.g. 10°) the 
+# slats should be fully closed as the sun would otherwise get through the slats.
+# 
+# So the task is to compute the angle of the slats in a way that the sun does 
+# not get in, but you still can look through.
+#
+# For that we need to know the geometry of the slats. For my slats: a=7.2cm 
+# (distance between two slats) and b=8cm (length of the slats). 
+# the geometry is explained here: doc/adaptive_mode/slat_geomertry.jpg
+# 
+# As it's quite compicated to solve the equation for beta, I created a spread 
+# sheet and used that to get an approximation for the curves. And this 
+# approximation is then implemented in this function. The spread sheet is in
+# doc/adaptive_mode/approximation_for_slat_geomertry.ods
+#
 # TODO: to implement this properly, we need to make the slat geometry configurable
+
 
 sub get_slats_for_elevation{
     my ($hash) = @_;
