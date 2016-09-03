@@ -391,7 +391,7 @@ sub test_get_slats_for_elevation {
 	
     add_reading($master, "sun_elevation", 30);
     $slats = VenetianBlinds::VenetianBlindController::get_slats_for_elevation($hash);
-    ok($slats > 35 and $slats <40);
+    is($slats, 38);
 
 
     add_reading($master, "sun_elevation", 9);

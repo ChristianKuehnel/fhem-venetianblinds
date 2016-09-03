@@ -182,7 +182,7 @@ sub get_slats_for_elevation{
     } elsif ($elevation <= 10) {
     	return 0;
     }
-    return $elevation*1.16 + 4;
+    return int($elevation*1.16 + 4);
 }
 
 
