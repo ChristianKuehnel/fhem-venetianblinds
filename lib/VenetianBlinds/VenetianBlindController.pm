@@ -135,7 +135,7 @@ sub update_automatic{
 		$hash->{azimuth_start} <= $sun_azimuth and
 		$sun_azimuth <= $hash->{azimuth_end} and
 		$cloud_index <= $hash->{could_index_threshold}) {
-		$new_scene ="adaptive";
+		$new_scene ="shaded";
 	} else {
 		$new_scene = "open";
 	}
