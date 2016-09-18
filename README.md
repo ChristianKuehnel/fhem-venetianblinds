@@ -16,3 +16,6 @@ This project is distributed under the Apache License Version 2.0
 4. If your fhem installation is *not* in ~fhem: ```export FHEM_HOME=\<path to your fhem installation\>```
 5. run ```make fhem``` to deploy the files to your fhem installation
 6. restart fhem and configure the module
+
+# Usage
+Check the command reference in fhem after you have installed the module.

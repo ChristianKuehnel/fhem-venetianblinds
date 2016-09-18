@@ -177,6 +177,70 @@ sub vbc_call{
 				Example: <code>rooms=Kitchen,Living</code> means that all blinds in the rooms named "Kitchen" and "Living" are controlled.
 		</ul>
 	</ul>
+    <a name="Venetian_Set"></a>
+    <b>Set</b>
+    <ul>
+        <b>Blind:</b>
+        <ul>
+            <li/><code>set automatic</code></br>
+                Set blinds to automatic mode. This is the normal mode, if blinds should be set accoring to the sun position.
+            <li/><code>set stop</code></br>
+                Stop the blind movement
+            <li/><code>set windalarm</code></br>
+                Trigger the wind alarm. This will cause the blinds to be opened, regardless of the current state.
+            <li/><code>set &lt;scene&gt;</code></br>
+                Disable the automatic and set a scene manually. The currently available scenes are:
+                <ul>
+                    <li/><code>open</code><br/> 
+                        Fully open the binds.
+                    <li/><code>closed</code> <br/>
+                        Fully close the blinds and slats.
+                    <li/><code>see_through</code> <br/>
+                        Fully close the blinds and set the slats horizontally, so that you can still <i>see through</i>.
+                    <li/><code>shaded</code><br/> 
+                        Close the blinds and slightly close the slats. This is the scene when the automatic closes the blinds.
+                    <li/><code>adaptive</code><br/>
+                        <b>Experimental!</b> Tries to set the slats so that they are just closed enough so that the sun does not get in. 
+                        This takes the elevation of the sun and geometry of the slats into consideration. 
+                </ul>
+        </ul>
+        <b>Room:</b>
+        <ul>
+            <li/><code>set automatic</code></br>
+                Set all blinds in this room to automatic mode. 
+            <li/><code>set stop</code></br>
+                Stop all blinds in this room.
+            <li/><code>set &lt;scene&gt;</code></br>
+                Set all blinds in this room to a certain scene.
+        </ul>
+        <b>Master:</b>
+        <ul>
+            <li/><code>set automatic</code></br>
+                Set all blinds to automatic mode. 
+            <li/><code>set stop</code></br>
+                Stop all blinds.
+            <li/><code>set trigger_update</code></br>
+                Trigger all blinds in automatic mode to update their scenes to the current sun position. 
+                This should not be neccesary in normal operation but is useful when trying our different parameters.
+        </ul>
+    </ul>
+
+<!-- there are get operations at the moment     
+    <a name="Venetian_Get"></a>
+    <b>Get</b>
+    <ul>
+        TODO
+    </ul>
+-->
+
+<!-- there are not attributes at the moment     
+    <a name="Venetian_Attributes"></a>
+    <b>Set</b>
+    <ul>
+        TODO
+    </ul>
+-->
+
 </ul>
 
 =end html

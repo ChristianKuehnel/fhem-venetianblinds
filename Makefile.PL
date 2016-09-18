@@ -48,6 +48,11 @@ fhem_restart: fhem
 	service fhem stop
 	sleep 5
 	service fhem start
+	
+fhem_doc: fhem
+	perl $(FHEM_HOME)/contrib/commandref_join.pl
 }
 };
+
+1;
 
