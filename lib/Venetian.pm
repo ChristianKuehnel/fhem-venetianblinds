@@ -5,6 +5,8 @@
 #
 ##############################################
 
+# $Id$
+
 use v5.10.1;
 use strict;
 use warnings;
@@ -87,6 +89,7 @@ sub vbc_call{
 1;
 
 =pod
+=item summary automates venetian blinds depending on sun and weather
 =begin html
 
 <a name="Venetian"></a>

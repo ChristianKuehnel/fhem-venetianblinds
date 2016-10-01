@@ -50,7 +50,15 @@ fhem_restart: fhem
 	service fhem start
 	
 fhem_doc: fhem
-	perl $(FHEM_HOME)/contrib/commandref_join.pl
+	cd $(FHEM_HOME) ; perl contrib/commandref_join.pl
+	
+fhem_release: test
+	svn checkout https://svn.code.sf.net/p/fhem/code/trunk/fhem fhem-code
+	$(CP) lib/Venetian.pm fhem-code/FHEM/99_Venetian.pm
+	mkdir -p fhem-code/FHEM/lib/VenetianBlinds
+	$(CP) lib/VenetianBlinds/*.pm fhem-code/FHEM/lib/VenetianBlinds	
+	cd fhem-code; perl contrib/commandref_join.pl
+	svn status fhem-code
 }
 };
 
