@@ -1,4 +1,4 @@
-DIR /lib/VenetianBlinds/
+DIR FHEM/lib/VenetianBlinds/
 UPD 2016-11-27_14:58:00 9060 FHEM/99_Venetian.pm
 UPD 2016-11-27_14:58:00 9002 FHEM/lib/VenetianBlinds/VenetianBlindController.pm
 UPD 2016-11-27_14:58:00 1981 FHEM/lib/VenetianBlinds/Shared.pm
