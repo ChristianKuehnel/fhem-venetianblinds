@@ -32,33 +32,10 @@ WriteMakefile(
 #
  sub MY::postamble {
     return q{
-ifndef FHEM_HOME
-FHEM_HOME = ~fhem
-endif
 
-fhem: 
-	$(NOECHO) $(ECHO) using fhem home directory: \"$(FHEM_HOME)\"
-	$(CP) lib/Venetian.pm $(FHEM_HOME)/FHEM/99_Venetian.pm
-	mkdir -p $(FHEM_HOME)/FHEM/lib/VenetianBlinds
-	$(CP) lib/VenetianBlinds/*.pm $(FHEM_HOME)/FHEM/lib/VenetianBlinds	
-	chown fhem:dialout $(FHEM_HOME)/FHEM/99_Venetian.pm 
-	chown fhem:dialout $(FHEM_HOME)/FHEM/lib/VenetianBlinds/*
-
-fhem_restart: fhem
-	service fhem stop
-	sleep 5
-	service fhem start
-	
-fhem_doc: fhem
-	cd $(FHEM_HOME) ; perl contrib/commandref_join.pl
-	
-fhem_release: test
-	svn checkout https://svn.code.sf.net/p/fhem/code/trunk/fhem fhem-code
-	$(CP) lib/Venetian.pm fhem-code/FHEM/99_Venetian.pm
-	mkdir -p fhem-code/FHEM/lib/VenetianBlinds
-	$(CP) lib/VenetianBlinds/*.pm fhem-code/FHEM/lib/VenetianBlinds	
-	cd fhem-code; perl contrib/commandref_join.pl
-	svn status fhem-code
+fhem_release: 
+	cd update;git log -n10 > CHANGED
+	perl create_update.pm
 }
 };
 

@@ -1,3 +1,30 @@
+commit 92f5dff7e0b14167a0cc0a58414ff7e272dbc64b
+Merge: 1b797f5 5e6f5c7
+Author: Christian Kühnel <christian.kuehnel@gmail.com>
+Date:   Sun Nov 27 15:17:28 2016 +0100
+
+    Merge branch 'master' of https://github.com/ChristianKuehnel/fhem-venetianblinds
+
+commit 1b797f5047b28fc137b4e7df222f5ee0504e1c61
+Author: Christian Kühnel <christian.kuehnel@gmail.com>
+Date:   Sun Nov 27 15:17:17 2016 +0100
+
+    fixed paths in update tree
+
+commit 5e6f5c7cc906e079b913d97a5400c761411f05d7
+Author: ChristianKuehnel <christian.kuehnel@gmail.com>
+Date:   Sun Nov 27 15:15:59 2016 +0100
+
+    Update control_venetian.txt
+    
+    files DIR path
+
+commit 3e52dbb0874a68671af1dfb5e6321f6ae7a51216
+Author: Christian Kühnel <christian.kuehnel@gmail.com>
+Date:   Sun Nov 27 15:10:53 2016 +0100
+
+    added changelog
+
 commit e3678c3607e53b760c74fd66ac4868e2bac2c7ca
 Author: Christian Kühnel <christian.kuehnel@gmail.com>
 Date:   Sun Nov 27 15:06:20 2016 +0100
@@ -33,27 +60,3 @@ Author: Christian Kühnel <christian.kuehnel@gmail.com>
 Date:   Sat Sep 3 11:18:07 2016 +0200
 
     output converted to integer value
-
-commit 4a1e83f63552b65b5c0a2169a4152cb77e8ef407
-Author: Christian Kühnel <christian.kuehnel@gmail.com>
-Date:   Fri Sep 2 19:36:26 2016 +0200
-
-    added documentation for adaptive mode
-
-commit 7f6ad9e1c081af126d52bf7dca4f1b6cd0c53482
-Author: Christian Kühnel <christian.kuehnel@gmail.com>
-Date:   Fri Sep 2 19:23:36 2016 +0200
-
-    made adaptive the default mode during automatic operation
-
-commit 5ec172dbef37db3c21838a24ffd635506dfba9cc
-Author: Christian Kühnel <christian.kuehnel@gmail.com>
-Date:   Fri Sep 2 19:18:36 2016 +0200
-
-    added new scene "adaptive"
-
-commit d4705e97160f02c5c2b738285165d7d535cbb05b
-Author: Christian Kühnel <christian.kuehnel@gmail.com>
-Date:   Fri Sep 2 07:23:39 2016 +0200
-
-    slats also set when blinds are at the top --> reduce number of movements
