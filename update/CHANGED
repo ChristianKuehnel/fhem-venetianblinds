@@ -1,0 +1,59 @@
+commit e3678c3607e53b760c74fd66ac4868e2bac2c7ca
+Author: Christian Kühnel <christian.kuehnel@gmail.com>
+Date:   Sun Nov 27 15:06:20 2016 +0100
+
+    fixed file sizes in update
+
+commit 23fb6f8de7499a801f024ad5f6203bb4028085cd
+Author: Christian Kühnel <christian.kuehnel@gmail.com>
+Date:   Sun Nov 27 15:00:42 2016 +0100
+
+    added new folder for automatic updates
+
+commit 0483b16e5141212a48d0e80760b69d8c0ae6eff1
+Author: Christian Kühnel <christian.kuehnel@gmail.com>
+Date:   Sat Oct 1 09:18:13 2016 +0200
+
+    first upload to fhem repo
+
+commit c9940c44e7a5fdf047e061138ff4c2fd824d4e09
+Author: Christian Kühnel <christian.kuehnel@gmail.com>
+Date:   Sun Sep 18 08:22:32 2016 +0200
+
+    completed documentation
+
+commit e9b44d26ef74496f725a870ee01c5016bdb310d2
+Author: Christian Kühnel <christian.kuehnel@gmail.com>
+Date:   Mon Sep 5 21:24:48 2016 +0200
+
+    automatic using mode "shaded" again
+
+commit b0f08393c410f779e8cb7cac75eb76f0582fff7c
+Author: Christian Kühnel <christian.kuehnel@gmail.com>
+Date:   Sat Sep 3 11:18:07 2016 +0200
+
+    output converted to integer value
+
+commit 4a1e83f63552b65b5c0a2169a4152cb77e8ef407
+Author: Christian Kühnel <christian.kuehnel@gmail.com>
+Date:   Fri Sep 2 19:36:26 2016 +0200
+
+    added documentation for adaptive mode
+
+commit 7f6ad9e1c081af126d52bf7dca4f1b6cd0c53482
+Author: Christian Kühnel <christian.kuehnel@gmail.com>
+Date:   Fri Sep 2 19:23:36 2016 +0200
+
+    made adaptive the default mode during automatic operation
+
+commit 5ec172dbef37db3c21838a24ffd635506dfba9cc
+Author: Christian Kühnel <christian.kuehnel@gmail.com>
+Date:   Fri Sep 2 19:18:36 2016 +0200
+
+    added new scene "adaptive"
+
+commit d4705e97160f02c5c2b738285165d7d535cbb05b
+Author: Christian Kühnel <christian.kuehnel@gmail.com>
+Date:   Fri Sep 2 07:23:39 2016 +0200
+
+    slats also set when blinds are at the top --> reduce number of movements
