@@ -1,3 +1,15 @@
+commit abc3e32290a3d09c7cf32f7056f2f68c4d6d20fa
+Author: Christian Kühnel <christian.kuehnel@gmail.com>
+Date:   Sun Nov 27 16:48:58 2016 +0100
+
+    patched manifest
+
+commit 9b761c839cb6641362c2986bebfcd7a034a38d81
+Author: Christian Kühnel <christian.kuehnel@gmail.com>
+Date:   Sun Nov 27 16:46:12 2016 +0100
+
+    added script update package generation
+
 commit 92f5dff7e0b14167a0cc0a58414ff7e272dbc64b
 Merge: 1b797f5 5e6f5c7
 Author: Christian Kühnel <christian.kuehnel@gmail.com>
@@ -48,15 +60,3 @@ Author: Christian Kühnel <christian.kuehnel@gmail.com>
 Date:   Sun Sep 18 08:22:32 2016 +0200
 
     completed documentation
-
-commit e9b44d26ef74496f725a870ee01c5016bdb310d2
-Author: Christian Kühnel <christian.kuehnel@gmail.com>
-Date:   Mon Sep 5 21:24:48 2016 +0200
-
-    automatic using mode "shaded" again
-
-commit b0f08393c410f779e8cb7cac75eb76f0582fff7c
-Author: Christian Kühnel <christian.kuehnel@gmail.com>
-Date:   Sat Sep 3 11:18:07 2016 +0200
-
-    output converted to integer value

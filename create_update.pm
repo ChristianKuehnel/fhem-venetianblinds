@@ -6,27 +6,13 @@ use File::Basename;
 use File::Spec::Functions 'catfile';
 use File::Find;
 use Date::Format;
-use File::Copy;
- use File::Path "make_path";
-
-my $update_root = catfile(dirname($0),"update");
+use Cwd 'abs_path';
+    
+my $update_root = abs_path(catfile(dirname($0),"update"));
 my $fhem_root = catfile($update_root,"FHEM");
 my $output_file = catfile($update_root,"control_venetian.txt");
-my $source_root = catfile(dirname($0),"lib");
 
-print("source root directory: $source_root\n");
 print("update root directory: $update_root\n");
-
-copy(   catfile($source_root, "Venetian.pm"),
-        catfile($fhem_root  , "99_Venetian.pm"));
-
-if (!-d catfile($fhem_root,"lib/VenetianBlinds")){
-	make_path(catfile($fhem_root,"lib/VenetianBlinds"));
-}
-
-for my $file ( glob(catfile($source_root,"VenetianBlinds/*.pm")) ) {
-	copy($file, catfile($fhem_root,"lib/VenetianBlinds"));
-};
 
 my @dirs = ();
 my @files= ();
@@ -39,20 +25,27 @@ sub wanted(){
 	}
 }
 
+sub short{
+	my ($result) = @_;
+	$result =~ s/$update_root\/(.*)/$1/g;
+	return $result;
+}
 
 find(\&wanted,$fhem_root);
 
 open(my $fh, ">", $output_file) or die "Could not open file '$output_file' $!";
 
 foreach my $dir (sort(@dirs)) {
-	print $fh "DIR $dir\n";
+	my $short = short($dir);
+	print $fh "DIR $short\n";
 }
 
 foreach my $file (sort(@files)){
+    my $short = short($file);
 	my @stat = stat($file);
 	my $date = time2str("%Y-%m-%d_%H:%M:%S", $stat[9]);
 	my $size = $stat[7];
-	print $fh "UPD $date $size $file\n";
+	print $fh "UPD $date $size $short\n";
 	
 }
 

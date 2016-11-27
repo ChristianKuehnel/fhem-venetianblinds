@@ -1,8 +1,8 @@
-UPD 2016-11-27_16:41:09 4096 update/FHEM
-UPD 2016-11-27_16:45:38 9060 update/FHEM/99_Venetian.pm
-UPD 2016-11-27_16:42:38 4096 update/FHEM/lib
-UPD 2016-11-27_16:42:38 4096 update/FHEM/lib/VenetianBlinds
-UPD 2016-11-27_16:45:38 1981 update/FHEM/lib/VenetianBlinds/Shared.pm
-UPD 2016-11-27_16:45:38 9002 update/FHEM/lib/VenetianBlinds/VenetianBlindController.pm
-UPD 2016-11-27_16:45:38 5214 update/FHEM/lib/VenetianBlinds/VenetianMasterController.pm
-UPD 2016-11-27_16:45:38 2230 update/FHEM/lib/VenetianBlinds/VenetianRoomController.pm
+DIR FHEM
+DIR FHEM/lib
+DIR FHEM/lib/VenetianBlinds
+UPD 2016-11-27_14:44:28 9060 FHEM/99_Venetian.pm
+UPD 2016-09-02_18:55:34 1981 FHEM/lib/VenetianBlinds/Shared.pm
+UPD 2016-09-05_21:22:54 9002 FHEM/lib/VenetianBlinds/VenetianBlindController.pm
+UPD 2016-08-29_08:15:29 5214 FHEM/lib/VenetianBlinds/VenetianMasterController.pm
+UPD 2016-07-24_08:53:50 2230 FHEM/lib/VenetianBlinds/VenetianRoomController.pm

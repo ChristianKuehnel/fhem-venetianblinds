@@ -34,6 +34,8 @@ WriteMakefile(
     return q{
 
 fhem_release: 
+	$(CP) -p lib/Venetian.pm update/FHEM/99_Venetian.pm
+	$(CP) -p lib/VenetianBlinds/*.pm update/FHEM/lib/VenetianBlinds
 	cd update;git log -n10 > CHANGED
 	perl create_update.pm
 }
