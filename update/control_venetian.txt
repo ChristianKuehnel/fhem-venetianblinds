@@ -1,0 +1,6 @@
+DIR /lib/VenetianBlinds/
+UPD 2016-11-27_14:58:00 1 FHEM/99_Venetian.pm
+UPD 2016-11-27_14:58:00 1 FHEM/lib/VenetianBlinds/VenetianBlindController.pm
+UPD 2016-11-27_14:58:00 1 FHEM/lib/VenetianBlinds/Shared.pm
+UPD 2016-11-27_14:58:00 1 FHEM/lib/VenetianBlinds/VenetianMasterController.pm
+UPD 2016-11-27_14:58:00 1 FHEM/lib/VenetianBlinds/VenetianRoomController.pm
