@@ -5,10 +5,12 @@ t/00-load.t
 t/VenetianBlindController.t
 t/VenetianMasterController.t
 t/VenetianRoomController.t
+t/Shared.t
 t/fhem_test_mocks.pm
 t/perl_critic.t
 README.md
 LICENSE
+lib/VenetianBlinds/Shared.pm
 lib/VenetianBlinds/VenetianRoomController.pm
 lib/VenetianBlinds/VenetianBlindController.pm
 lib/VenetianBlinds/VenetianMasterController.pm
