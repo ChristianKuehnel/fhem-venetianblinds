@@ -1,5 +1,8 @@
+*this project is deprecated*
+
 # fhem-venetianblinds
 venetian blind controller for FHEM home automation
+
 
 # License
 This project is distributed under the Apache License Version 2.0
